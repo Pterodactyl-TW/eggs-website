@@ -1,9 +1,5 @@
 import { REPOS, ORG, findEgg, loadContributors, rawUrl, githubUrl, escapeHtml } from "./eggs-client.js";
 
-function boolMark(v) {
-  return v ? "✅" : "❌";
-}
-
 function commitsUrl(egg) {
   return `https://github.com/${ORG}/${egg.repo}/commits/${egg.branch}/${egg.path}`;
 }
@@ -88,14 +84,16 @@ export async function renderEggDetail(root) {
   const variablesHtml = variables
     .map((v) => `
       <div class="variable-card">
-        <h3>${escapeHtml(v.name)}</h3>
-        <div class="var-desc">${escapeHtml(v.description || "")}</div>
-        <div class="var-meta">
-          <div><span class="label">環境變數：</span><code>${escapeHtml(v.env_variable)}</code></div>
-          <div><span class="label">預設值：</span>${escapeHtml(v.default_value || "無")}</div>
-          <div><span class="label">使用者可見：</span>${boolMark(v.user_viewable)}</div>
-          <div><span class="label">使用者可編輯：</span>${boolMark(v.user_editable)}</div>
-          <div><span class="label">驗證規則：</span><code>${escapeHtml(v.rules || "")}</code></div>
+        <div class="variable-card-top">
+          <h3>${escapeHtml(v.name)}</h3>
+          <code class="env-chip">${escapeHtml(v.env_variable)}</code>
+        </div>
+        ${v.description ? `<p class="var-desc">${escapeHtml(v.description)}</p>` : ""}
+        <div class="var-pills">
+          <span class="var-pill">預設值：<code>${escapeHtml(v.default_value || "無")}</code></span>
+          <span class="var-pill ${v.user_viewable ? "on" : "off"}">${v.user_viewable ? "👁 使用者可見" : "🚫 使用者不可見"}</span>
+          <span class="var-pill ${v.user_editable ? "on" : "off"}">${v.user_editable ? "✏️ 可編輯" : "🔒 唯讀"}</span>
+          ${v.rules ? `<span class="var-pill">規則：<code>${escapeHtml(v.rules)}</code></span>` : ""}
         </div>
       </div>
     `)
