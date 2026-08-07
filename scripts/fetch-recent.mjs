@@ -31,6 +31,20 @@ function humanName(path) {
   return file.replace(/[-_]/g, " ");
 }
 
+// 走 jsDelivr CDN 抓真正的 name/description，不佔用 api.github.com 額度。
+async function fetchEggContent(repoKey, path) {
+  const encodedPath = path.split("/").map(encodeURIComponent).join("/");
+  for (const branch of ["main", "master"]) {
+    try {
+      const res = await fetch(`https://cdn.jsdelivr.net/gh/${ORG}/${repoKey}@${branch}/${encodedPath}`);
+      if (res.ok) return res.json();
+    } catch (_) {
+      // 試下一個分支名稱
+    }
+  }
+  return null;
+}
+
 async function main() {
   const updates = [];
 
@@ -71,6 +85,18 @@ async function main() {
 
   updates.sort((a, b) => new Date(b.date) - new Date(a.date));
   const result = updates.slice(0, TAKE);
+
+  // 只針對最終要顯示的少數幾筆補上真正的 name/description
+  await Promise.all(
+    result.map(async (u) => {
+      const content = await fetchEggContent(u.egg.repo, u.egg.path);
+      if (content) {
+        u.egg.name = content.name || u.egg.name;
+        u.egg.description = content.description || null;
+      }
+    })
+  );
+
   writeFileSync("public/recent-eggs.json", JSON.stringify(result, null, 2));
   console.log(`已寫入 public/recent-eggs.json，共 ${result.length} 筆。`);
 }
