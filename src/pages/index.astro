@@ -1,0 +1,156 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const categories = [
+  {
+    icon: "🎮",
+    title: "Games",
+    desc: "遊戲伺服器 Egg，涵蓋 Minecraft、ARK、CS 等。",
+    href: "/games/",
+    cta: "Browse games",
+  },
+  {
+    icon: "📦",
+    title: "Applications",
+    desc: "應用程式 Egg，涵蓋資料庫、機器人與各種服務。",
+    href: "/applications/",
+    cta: "Browse applications",
+  },
+  {
+    icon: "💻",
+    title: "Languages",
+    desc: "通用語言 Egg，涵蓋 Python、Node.js、Go 等。",
+    href: "/languages/",
+    cta: "Browse languages",
+  },
+];
+---
+<Layout title="Home">
+  <section class="hero">
+    <h1>尋找適合你伺服器的 Egg</h1>
+    <p>Pterodactyl-TW 繁體中文化 Eggs 資源庫，資料即時取自三個 Egg 倉庫，皆已完成繁體中文化。</p>
+    <div class="search-bar">
+      <input id="search-input" type="text" placeholder="搜尋 Egg 名稱...（例如 Minecraft、Discord Bot、Python）" autocomplete="off">
+    </div>
+  </section>
+
+  <div id="search-results" hidden>
+    <h2 class="section-title">Search Results</h2>
+    <section id="status" class="status"></section>
+    <section id="egg-grid" class="egg-grid"></section>
+  </div>
+
+  <div id="default-sections">
+    <div class="category-grid">
+      {categories.map((cat) => (
+        <a class="category-card" href={cat.href}>
+          <span class="icon">{cat.icon}</span>
+          <h3>{cat.title}</h3>
+          <p>{cat.desc}</p>
+          <span class="cta">{cat.cta} →</span>
+        </a>
+      ))}
+    </div>
+
+    <h2 class="section-title">Recently Updated</h2>
+    <section id="recent-status" class="status"></section>
+    <section id="recent-grid" class="egg-grid"></section>
+  </div>
+</Layout>
+
+<script>
+  import { loadAllEggs, loadRecentlyUpdated, escapeHtml } from "../lib/eggs-client.js";
+
+  const searchInput = document.getElementById("search-input");
+  const searchResults = document.getElementById("search-results");
+  const defaultSections = document.getElementById("default-sections");
+  const statusEl = document.getElementById("status");
+  const gridEl = document.getElementById("egg-grid");
+  const recentStatusEl = document.getElementById("recent-status");
+  const recentGridEl = document.getElementById("recent-grid");
+
+  let allEggs = [];
+  let eggsLoaded = false;
+
+  function renderEggCard(egg, extraHtml = "") {
+    const card = document.createElement("div");
+    card.className = "egg-card";
+    card.innerHTML = `
+      <h3>${escapeHtml(egg.name)}</h3>
+      <div class="egg-desc">${escapeHtml(egg.path)}</div>
+      <div class="egg-tags">
+        <span class="egg-tag">${escapeHtml(egg.repoLabel)}</span>
+        <span class="egg-tag">${escapeHtml(egg.category)}</span>
+      </div>
+      ${extraHtml}
+    `;
+    card.onclick = () => window.openEggModal(egg);
+    return card;
+  }
+
+  async function ensureAllEggsLoaded() {
+    if (eggsLoaded) return;
+    statusEl.textContent = "正在從 GitHub 即時載入 Egg 清單...";
+    try {
+      const { eggs, errors } = await loadAllEggs();
+      allEggs = eggs;
+      eggsLoaded = true;
+      statusEl.textContent = errors.length
+        ? `已載入 ${eggs.length} 個 Egg，但部分來源載入失敗：${errors.join("；")}`
+        : `已即時載入 ${eggs.length} 個 Egg。`;
+    } catch (err) {
+      statusEl.textContent = `載入失敗：${err.message}`;
+    }
+  }
+
+  function renderSearch(term) {
+    gridEl.innerHTML = "";
+    const filtered = allEggs.filter(
+      (egg) => egg.name.toLowerCase().includes(term) || egg.path.toLowerCase().includes(term)
+    );
+    if (!filtered.length) {
+      gridEl.innerHTML = `<p class="status">找不到符合「${escapeHtml(term)}」的 Egg。</p>`;
+      return;
+    }
+    filtered.slice(0, 60).forEach((egg) => gridEl.appendChild(renderEggCard(egg)));
+  }
+
+  let debounce;
+  searchInput.addEventListener("input", async (e) => {
+    const term = e.target.value.trim().toLowerCase();
+    clearTimeout(debounce);
+    if (!term) {
+      searchResults.hidden = true;
+      defaultSections.hidden = false;
+      return;
+    }
+    debounce = setTimeout(async () => {
+      defaultSections.hidden = true;
+      searchResults.hidden = false;
+      await ensureAllEggsLoaded();
+      renderSearch(term);
+    }, 150);
+  });
+
+  async function loadRecent() {
+    recentStatusEl.textContent = "正在載入最近更新的 Egg...";
+    try {
+      const recent = await loadRecentlyUpdated();
+      recentStatusEl.textContent = "";
+      if (!recent.length) {
+        recentStatusEl.textContent = "目前沒有可顯示的最近更新資料。";
+        return;
+      }
+      recent.forEach(({ egg, date }) => {
+        const dateStr = date ? new Date(date).toLocaleDateString("zh-TW") : "";
+        recentGridEl.appendChild(
+          renderEggCard(egg, dateStr ? `<div class="egg-date">最後更新：${dateStr}</div>` : "")
+        );
+      });
+    } catch (err) {
+      recentStatusEl.textContent = `載入失敗：${err.message}`;
+    }
+  }
+
+  loadRecent();
+</script>

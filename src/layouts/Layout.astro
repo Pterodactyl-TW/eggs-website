@@ -1,0 +1,121 @@
+---
+const { title, description = "Pterodactyl-TW 繁體中文化 Eggs 資源庫，瀏覽、搜尋並取得可直接匯入 Panel 的 Egg 設定檔。", active = "" } = Astro.props;
+import "../styles/global.css";
+
+const navItems = [
+  { href: "/", label: "Home", id: "home" },
+  { href: "/games/", label: "Games", id: "games" },
+  { href: "/applications/", label: "Applications", id: "applications" },
+  { href: "/languages/", label: "Languages", id: "languages" },
+  { href: "/request/", label: "Request", id: "request" },
+];
+---
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title} | Pterodactyl-TW Eggs</title>
+  <meta name="description" content={description}>
+  <link rel="icon" href="/pterry.svg">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/">
+        <img src="/pterry.svg" alt="Pterodactyl-TW" class="brand-logo">
+        <span>Pterodactyl-TW <strong>Eggs</strong></span>
+      </a>
+      <nav class="main-nav">
+        {navItems.map((item) => (
+          <a href={item.href} class={active === item.id ? "active" : ""}>{item.label}</a>
+        ))}
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <slot />
+  </main>
+
+  <footer class="site-footer">
+    <p>本站由 <a href="https://pterodactyl.tw">Pterodactyl-TW 繁體中文化服務團隊</a> 維護，資料即時取自
+      <a href="https://github.com/Pterodactyl-TW/game-eggs">game-eggs</a>、
+      <a href="https://github.com/Pterodactyl-TW/application-eggs">application-eggs</a>、
+      <a href="https://github.com/Pterodactyl-TW/generic-eggs">generic-eggs</a>
+      三個倉庫，若有翻譯問題歡迎透過 <a href="https://pterodactyl.tw/discord">Discord</a> 與我們聯繫。</p>
+  </footer>
+
+  <div id="egg-modal" class="modal-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true">
+      <button class="modal-close" id="modal-close" aria-label="關閉">&times;</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <script>
+    import { rawUrl, githubUrl, escapeHtml, ORG } from "../lib/eggs-client.js";
+
+    async function openEggModal(egg) {
+      const modal = document.getElementById("egg-modal");
+      const body = document.getElementById("modal-body");
+      modal.hidden = false;
+      body.innerHTML = `<p class="status">正在載入 ${escapeHtml(egg.name)} 的內容...</p>`;
+
+      try {
+        const res = await fetch(rawUrl(egg));
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const importUrl = rawUrl(egg);
+        const dockerImages = data.docker_images ? Object.keys(data.docker_images).join(", ") : "-";
+
+        body.innerHTML = `
+          <h2>${escapeHtml(data.name || egg.name)}</h2>
+          <p>${escapeHtml(data.description || "（無描述）")}</p>
+          <table class="meta-table">
+            <tr><td>來源倉庫</td><td>${escapeHtml(egg.repoLabel)}（${escapeHtml(egg.repo)}）</td></tr>
+            <tr><td>路徑</td><td>${escapeHtml(egg.path)}</td></tr>
+            <tr><td>作者</td><td>${escapeHtml(data.author || "-")}</td></tr>
+            <tr><td>Docker 映像檔</td><td>${escapeHtml(dockerImages)}</td></tr>
+          </table>
+          <p>在 Panel 建立 Egg 時選擇「透過 URL 匯入」，貼上以下網址即可直接匯入此 Egg：</p>
+          <div class="import-url-box">
+            <input type="text" readonly value="${escapeHtml(importUrl)}" onclick="this.select()">
+            <button id="copy-url-btn">複製</button>
+          </div>
+          <div class="modal-actions">
+            <a class="btn" href="${escapeHtml(importUrl)}" target="_blank" rel="noopener">檢視原始 JSON</a>
+            <a class="btn" href="${escapeHtml(githubUrl(egg))}" target="_blank" rel="noopener">在 GitHub 上查看</a>
+          </div>
+        `;
+
+        document.getElementById("copy-url-btn").onclick = () => {
+          navigator.clipboard.writeText(importUrl).then(() => {
+            const btn = document.getElementById("copy-url-btn");
+            btn.textContent = "已複製！";
+            setTimeout(() => { btn.textContent = "複製"; }, 1500);
+          });
+        };
+      } catch (err) {
+        body.innerHTML = `<p class="status">載入失敗：${escapeHtml(err.message)}</p>`;
+      }
+    }
+
+    function closeEggModal() {
+      const modal = document.getElementById("egg-modal");
+      modal.hidden = true;
+      document.getElementById("modal-body").innerHTML = "";
+    }
+
+    document.getElementById("modal-close").onclick = closeEggModal;
+    document.getElementById("egg-modal").addEventListener("click", (e) => {
+      if (e.target.id === "egg-modal") closeEggModal();
+    });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeEggModal(); });
+
+    // 讓各頁面的 script 可以透過 window.openEggModal 呼叫共用的彈窗
+    window.openEggModal = openEggModal;
+    window.eggsOrg = ORG;
+  </script>
+</body>
+</html>

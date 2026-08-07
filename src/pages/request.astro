@@ -1,0 +1,28 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+<Layout title="Request" active="request" description="想請求新增或更新一個 Egg？這裡說明如何提出請求。">
+  <section class="hero">
+    <h1>Request an Egg</h1>
+    <p>找不到你想要的 Egg，或發現某個 Egg 的翻譯有問題？以下是提出請求的管道。</p>
+  </section>
+
+  <div class="request-box">
+    <h2>新增 / 更新 Egg</h2>
+    <p>我們的 Egg 皆同步自 Pterodactyl 官方 Egg 儲存庫並進行繁體中文化，若你想請求新增或更新一個 Egg：</p>
+    <ul>
+      <li>若官方 <a href="https://github.com/pterodactyl/game-eggs" target="_blank" rel="noopener">game-eggs</a> / <a href="https://github.com/pterodactyl/application-eggs" target="_blank" rel="noopener">application-eggs</a> 已有該 Egg，我們會在同步時一併翻譯，可以直接到我們對應的儲存庫開 Issue 提醒我們優先處理：
+        <ul>
+          <li><a href="https://github.com/Pterodactyl-TW/game-eggs/issues/new" target="_blank" rel="noopener">在 game-eggs 開 Issue</a></li>
+          <li><a href="https://github.com/Pterodactyl-TW/application-eggs/issues/new" target="_blank" rel="noopener">在 application-eggs 開 Issue</a></li>
+          <li><a href="https://github.com/Pterodactyl-TW/generic-eggs/issues/new" target="_blank" rel="noopener">在 generic-eggs 開 Issue</a></li>
+        </ul>
+      </li>
+      <li>若官方尚未收錄該遊戲／應用程式，請先至官方倉庫依照他們的貢獻指南提交 Egg，待官方收錄後我們會同步翻譯。</li>
+      <li>若是翻譯內容本身有錯誤或需要更新，歡迎直接開 Pull Request，或透過 <a href="https://pterodactyl.tw/discord" target="_blank" rel="noopener">Discord</a> 告訴我們。</li>
+    </ul>
+
+    <h2>加入我們</h2>
+    <p>如果你想加入繁體中文化服務團隊，一起維護 Eggs、Panel、Wings 與文件的翻譯，歡迎透過 <a href="https://pterodactyl.tw/discord" target="_blank" rel="noopener">Discord</a> 與我們聯絡。</p>
+  </div>
+</Layout>

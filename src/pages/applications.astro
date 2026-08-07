@@ -1,0 +1,30 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+<Layout title="Applications" active="applications" description="瀏覽所有繁體中文化的應用程式 Egg，涵蓋資料庫、機器人、服務等。">
+  <section class="hero">
+    <h1>📦 Applications</h1>
+    <p>來自 <a href="https://github.com/Pterodactyl-TW/application-eggs" target="_blank" rel="noopener">application-eggs</a> 倉庫的繁體中文化應用程式 Egg。</p>
+    <div class="search-bar">
+      <input id="search-input" type="text" placeholder="搜尋應用程式名稱...（例如 Redis、Discord Bot）" autocomplete="off">
+    </div>
+  </section>
+
+  <section class="controls">
+    <div id="category-filters" class="filter-group" role="group" aria-label="分類篩選"></div>
+  </section>
+
+  <section id="status" class="status"></section>
+  <section id="egg-grid" class="egg-grid"></section>
+</Layout>
+
+<script>
+  import { mountEggBrowser } from "../lib/egg-browser.js";
+  mountEggBrowser({
+    repoId: "applications",
+    gridEl: document.getElementById("egg-grid"),
+    statusEl: document.getElementById("status"),
+    searchEl: document.getElementById("search-input"),
+    categoryFiltersEl: document.getElementById("category-filters"),
+  });
+</script>
