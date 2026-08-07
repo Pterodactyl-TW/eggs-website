@@ -183,7 +183,14 @@ main {
 }
 .inline-search input:focus { outline: 2px solid var(--accent); }
 
-.egg-card-link { display: inline-block; margin-top: 10px; color: var(--accent); font-size: 0.85rem; font-weight: 600; }
+.egg-card-link {
+  position: absolute;
+  right: 16px;
+  bottom: 14px;
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
 
 .section-title {
   font-size: 1.2rem;
@@ -229,14 +236,17 @@ main {
 }
 
 .egg-card {
+  position: relative;
   display: block;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 16px;
+  padding-bottom: 40px;
   cursor: pointer;
   transition: background 0.15s, transform 0.15s;
   color: var(--text);
+  min-height: 100%;
 }
 .egg-card:hover { background: var(--card-hover); transform: translateY(-2px); text-decoration: none; }
 .egg-card h3 { margin: 0 0 6px; font-size: 1.05rem; color: var(--text); }
