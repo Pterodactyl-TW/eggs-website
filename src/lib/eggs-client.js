@@ -9,6 +9,11 @@ export const REPOS = {
   languages: { key: "generic-eggs", label: "語言" },
 };
 
+// 部署時由 CI 帶入 commit SHA 作為快取破壞用的版本號，
+// 避免 GitHub Pages 的 CDN／瀏覽器快取住舊版的 recent-eggs.json / egg-meta.json，
+// 導致每次部署更新的資料要等快取過期才會生效（本機開發沒有這個變數時退回用建置時間）。
+const BUILD_ID = import.meta.env.PUBLIC_BUILD_ID || "dev";
+
 const CACHE_TTL_MS = 15 * 60 * 1000;
 // api.github.com 未登入時每小時只有 60 次配額，commit 相關查詢很容易把它用光，
 // 所以像「貢獻者」這類非必要功能快取要拉長。
@@ -107,7 +112,7 @@ function humanName(path) {
 let eggMetaPromise = null;
 function loadEggMeta() {
   if (!eggMetaPromise) {
-    eggMetaPromise = fetch("/egg-meta.json")
+    eggMetaPromise = fetch(`/egg-meta.json?v=${BUILD_ID}`)
       .then((res) => (res.ok ? res.json() : null))
       .catch(() => null);
   }
@@ -207,7 +212,7 @@ export async function loadContributors(egg) {
 // 避免每個訪客都即時呼叫 api.github.com 的 commits API（未登入額度很容易被打爆）。
 // 本機開發環境沒有這個檔案時，由呼叫端（index.astro）自行退回顯示隨機抽樣的 Egg。
 export async function loadRecentlyUpdated() {
-  const res = await fetch("/recent-eggs.json");
+  const res = await fetch(`/recent-eggs.json?v=${BUILD_ID}`);
   if (!res.ok) throw new Error("尚未產生最近更新資料");
   return res.json();
 }

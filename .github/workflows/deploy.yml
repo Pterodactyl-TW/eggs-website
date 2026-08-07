@@ -36,6 +36,8 @@ jobs:
         run: node scripts/fetch-egg-meta.mjs
 
       - name: Build
+        env:
+          PUBLIC_BUILD_ID: ${{ github.sha }}
         run: npm run build
 
       - name: Deploy
