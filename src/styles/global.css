@@ -419,11 +419,11 @@ main {
 .contributors-label { color: var(--text-dim); font-size: 0.8rem; }
 .contributor-avatars { display: flex; align-items: center; }
 .contributor-avatar {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 2px solid var(--card);
-  margin-left: -8px;
+  margin-left: -12px;
   object-fit: cover;
   background: var(--bg-alt);
 }
@@ -432,12 +432,12 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.7rem;
+  font-size: 0.95rem;
   color: var(--text-dim);
 }
 .contributor-more {
-  margin-left: 6px;
-  font-size: 0.75rem;
+  margin-left: 8px;
+  font-size: 0.85rem;
   color: var(--text-dim);
 }
 
