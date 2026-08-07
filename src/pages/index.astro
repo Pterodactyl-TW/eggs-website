@@ -82,7 +82,7 @@ const categories = [
         <h3>${escapeHtml(egg.name)}</h3>
         <span class="badge">${escapeHtml(egg.repoLabel)}</span>
       </div>
-      <div class="egg-desc">${escapeHtml(egg.path)}</div>
+      <div class="egg-desc">${escapeHtml(egg.description || egg.path)}</div>
       ${extraHtml}
     `;
     return card;

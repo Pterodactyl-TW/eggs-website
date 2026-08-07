@@ -3,3 +3,4 @@ dist/
 .astro/
 .vscode/
 public/recent-eggs.json
+public/egg-meta.json

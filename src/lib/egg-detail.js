@@ -1,7 +1,7 @@
 import { marked } from "marked";
 import hljs from "highlight.js/lib/core";
 import bash from "highlight.js/lib/languages/bash";
-import { REPOS, ORG, findEgg, loadContributors, rawUrl, githubUrl, escapeHtml } from "./eggs-client.js";
+import { REPOS, ORG, findEgg, loadContributors, rawUrl, githubUrl, encodePath, escapeHtml } from "./eggs-client.js";
 import { ICONS } from "./icons.js";
 
 hljs.registerLanguage("bash", bash);
@@ -24,13 +24,13 @@ marked.use({
 });
 
 function commitsUrl(egg) {
-  return `https://github.com/${ORG}/${egg.repo}/commits/${egg.branch}/${egg.path}`;
+  return `https://github.com/${ORG}/${egg.repo}/commits/${egg.branch}/${encodePath(egg.path)}`;
 }
 
 // 嘗試抓取 egg 檔案所在資料夾底下的 README.md（大小寫皆嘗試），
 // 找不到就回傳 null，由呼叫端退回使用 egg 的 description 欄位。
 async function fetchFolderReadme(egg) {
-  const folder = egg.path.split("/").slice(0, -1).join("/");
+  const folder = encodePath(egg.path.split("/").slice(0, -1).join("/"));
   const candidates = ["README.md", "Readme.md", "readme.md"];
   for (const filename of candidates) {
     const url = `https://raw.githubusercontent.com/${ORG}/${egg.repo}/${egg.branch}/${folder ? folder + "/" : ""}${filename}`;

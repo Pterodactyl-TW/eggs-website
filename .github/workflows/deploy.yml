@@ -32,6 +32,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node scripts/fetch-recent.mjs
 
+      - name: Fetch egg name/description metadata
+        run: node scripts/fetch-egg-meta.mjs
+
       - name: Build
         run: npm run build
 

@@ -60,7 +60,7 @@ export async function mountEggBrowser({ repoId, gridEl, statusEl, searchEl, cate
       card.href = eggDetailUrl(egg);
       card.innerHTML = `
         <h3>${escapeHtml(egg.name)}</h3>
-        <div class="egg-desc">${escapeHtml(egg.path)}</div>
+        <div class="egg-desc">${escapeHtml(egg.description || egg.path)}</div>
         <span class="egg-card-link">查看詳細 →</span>
       `;
       gridEl.appendChild(card);

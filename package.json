@@ -7,7 +7,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "fetch:recent": "node scripts/fetch-recent.mjs"
+    "fetch:recent": "node scripts/fetch-recent.mjs",
+    "fetch:meta": "node scripts/fetch-egg-meta.mjs"
   },
   "dependencies": {
     "astro": "^4.16.0",

@@ -101,18 +101,36 @@ function humanName(path) {
   return file.replace(/[-_]/g, " ");
 }
 
+// 部署時由 scripts/fetch-egg-meta.mjs 預先產生的 { repoKey: { path: { name, description } } }，
+// 讓列表頁能顯示 egg 檔案裡真正的 name/description，而不是用檔名猜、拿路徑充當描述。
+// 本機開發環境沒有這個檔案時，回傳 null，呼叫端會退回用檔名/路徑顯示。
+let eggMetaPromise = null;
+function loadEggMeta() {
+  if (!eggMetaPromise) {
+    eggMetaPromise = fetch("/egg-meta.json")
+      .then((res) => (res.ok ? res.json() : null))
+      .catch(() => null);
+  }
+  return eggMetaPromise;
+}
+
 export async function loadRepoEggs(repoId) {
   const repo = REPOS[repoId];
-  const { branch, tree } = await fetchRepoTree(repo.key);
-  return tree.map((item) => ({
-    repoId,
-    repo: repo.key,
-    repoLabel: repo.label,
-    branch,
-    path: item.path,
-    category: categoryOf(item.path),
-    name: humanName(item.path),
-  }));
+  const [{ branch, tree }, meta] = await Promise.all([fetchRepoTree(repo.key), loadEggMeta()]);
+  const repoMeta = meta?.[repo.key];
+  return tree.map((item) => {
+    const m = repoMeta?.[item.path];
+    return {
+      repoId,
+      repo: repo.key,
+      repoLabel: repo.label,
+      branch,
+      path: item.path,
+      category: categoryOf(item.path),
+      name: m?.name || humanName(item.path),
+      description: m?.description || null,
+    };
+  });
 }
 
 export async function loadAllEggs() {
@@ -132,12 +150,18 @@ export async function loadAllEggs() {
   return { eggs, errors };
 }
 
+// 路徑逐段編碼：像 "c#/egg-generic-c.json" 裡的 # 若不編碼，
+// 瀏覽器/fetch 會把它當成網址 fragment，導致路徑被截斷、抓取失敗。
+export function encodePath(path) {
+  return path.split("/").map(encodeURIComponent).join("/");
+}
+
 export function rawUrl(egg) {
-  return `https://raw.githubusercontent.com/${ORG}/${egg.repo}/${egg.branch}/${egg.path}`;
+  return `https://raw.githubusercontent.com/${ORG}/${egg.repo}/${egg.branch}/${encodePath(egg.path)}`;
 }
 
 export function githubUrl(egg) {
-  return `https://github.com/${ORG}/${egg.repo}/blob/${egg.branch}/${egg.path}`;
+  return `https://github.com/${ORG}/${egg.repo}/blob/${egg.branch}/${encodePath(egg.path)}`;
 }
 
 // 產生指向詳細頁面的連結（詳細頁再依 repoId + path 即時重新查找該 egg）。
