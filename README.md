@@ -1,18 +1,18 @@
-# Pterodactyl-TW Eggs
+# Pterodactyl-TW Eggs 資源庫
 
 [![部署](https://github.com/Pterodactyl-TW/eggs-website/actions/workflows/deploy.yml/badge.svg)](https://github.com/Pterodactyl-TW/eggs-website/actions/workflows/deploy.yml)
 
-[eggs.pterodactyl.tw](https://eggs.pterodactyl.tw) 的原始碼 —— Pterodactyl-TW 繁體中文化 Eggs 資源庫，讓你搜尋、瀏覽並取得可直接匯入 Panel 的 Egg 設定檔。
+歡迎來到 [eggs.pterodactyl.tw](https://eggs.pterodactyl.tw)！這是專為 Pterodactyl 打造的繁體中文化 Eggs 資源與搜尋平台。
 
 ## 這是什麼
 
-本站彙整了 Pterodactyl-TW 底下三個繁體中文化 Egg 倉庫的內容：
+我們彙整並翻譯了各類熱門的 Egg 設定檔，讓你在中文化與架設伺服器時更加輕鬆：
 
-- [game-eggs](https://github.com/Pterodactyl-TW/game-eggs) — 遊戲伺服器 Egg
+- [game-eggs](https://github.com/Pterodactyl-TW/game-eggs) — 各類遊戲伺服器 Egg
 - [application-eggs](https://github.com/Pterodactyl-TW/application-eggs) — 應用程式 Egg
 - [generic-eggs](https://github.com/Pterodactyl-TW/generic-eggs) — 通用語言 Egg
 
-檔案樹與 Egg 內容皆在瀏覽器端即時抓取（透過 [jsDelivr](https://www.jsdelivr.com/) CDN，不受 GitHub API 額度限制），點進任一個 Egg 都能看到說明、變數設定、Docker 映像檔、安裝腳本，並一鍵取得可直接貼進 Panel「透過 URL 匯入」的網址。
+在這裡，你可以直接搜尋、瀏覽並取得每個 Egg 的詳細說明、變數設定、Docker 映像檔與安裝腳本。最方便的是，網站提供了一鍵複製功能，讓你直接貼進 Panel 透過 URL 快速匯入！
 
 ## 技術架構
 
