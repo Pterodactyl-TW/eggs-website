@@ -493,6 +493,19 @@ main {
 }
 .docker-table th, .var-table th { color: var(--text-dim); font-weight: 600; }
 
+.docker-code {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #05060a;
+  color: #7dd3fc;
+  font-size: 0.75rem;
+  font-family: monospace;
+}
+@media (prefers-color-scheme: light) {
+  .docker-code { background: #1a1c24; color: #7dd3fc; }
+}
+
 .variable-card {
   background: var(--card);
   border: 1px solid var(--border);
