@@ -67,7 +67,7 @@ export async function renderEggDetail(root) {
   const importUrl = rawUrl(egg);
   const repoMeta = REPOS[repoId];
   const repoPagePath = { games: "/games/", applications: "/applications/", languages: "/languages/" }[repoId];
-  const issueUrl = `https://github.com/Pterodactyl-TW/${egg.repo}/issues/new?title=${encodeURIComponent(`[問題回報] ${data.name || egg.name}`)}`;
+  const issueUrl = "https://pterodactyl.tw/discord";
 
   const dockerImages = data.docker_images ? Object.entries(data.docker_images) : [];
   const dockerRows = dockerImages

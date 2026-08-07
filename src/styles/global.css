@@ -394,18 +394,19 @@ main {
   border: 1px solid rgba(88, 101, 242, 0.35);
 }
 
-.actions-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.actions-row { display: flex; gap: 10px; flex-wrap: wrap; }
 .actions-row button, .actions-row a.btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border-radius: 8px;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--bg-alt);
   color: var(--text);
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 500;
   white-space: nowrap;
 }
 .actions-row button.primary, .actions-row a.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
