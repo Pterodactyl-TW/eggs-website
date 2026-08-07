@@ -162,7 +162,7 @@ const categories = [
       renderRecentList(recent);
     } catch (_) {
       // 本機開發環境（尚未跑過 scripts/fetch-recent.mjs）：退回隨機抽樣，不呼叫 GitHub API
-      recentTitleEl.textContent = "精選 Egg（本機開發模式，隨機顯示）";
+      recentTitleEl.textContent = "最近變更";
       await ensureAllEggsLoaded();
       recentStatusEl.textContent = allEggs.length ? "" : "目前沒有可顯示的 Egg。";
       const sample = [...allEggs].sort(() => Math.random() - 0.5).slice(0, 8);

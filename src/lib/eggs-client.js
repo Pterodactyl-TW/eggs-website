@@ -184,7 +184,7 @@ export async function loadContributors(egg) {
 // 本機開發環境沒有這個檔案時，由呼叫端（index.astro）自行退回顯示隨機抽樣的 Egg。
 export async function loadRecentlyUpdated() {
   const res = await fetch("/recent-eggs.json");
-  if (!res.ok) throw new Error("尚未產生最近更新資料（本機開發環境屬正常情況）");
+  if (!res.ok) throw new Error("尚未產生最近更新資料");
   return res.json();
 }
 
