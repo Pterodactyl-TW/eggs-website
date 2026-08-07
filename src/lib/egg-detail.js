@@ -166,7 +166,10 @@ export async function renderEggDetail(root) {
         <details>
           <summary>安裝腳本</summary>
           <div class="accordion-body">
-            <div class="install-meta">容器映像檔：<code>${escapeHtml(install.container || "-")}</code> ・ 進入點：<code>${escapeHtml(install.entrypoint || "-")}</code></div>
+            <div class="install-meta">
+              <div>容器映像檔：<code>${escapeHtml(install.container || "-")}</code></div>
+              <div>進入點：<code>${escapeHtml(install.entrypoint || "-")}</code></div>
+            </div>
             <pre class="script-block">${escapeHtml(install.script || "")}</pre>
           </div>
         </details>
