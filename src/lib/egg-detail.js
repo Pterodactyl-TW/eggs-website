@@ -4,6 +4,24 @@ function boolMark(v) {
   return v ? "✅" : "❌";
 }
 
+function renderContributors(contributors) {
+  const shown = contributors.slice(0, 5);
+  const extra = contributors.length - shown.length;
+  const avatars = shown
+    .map((c) => {
+      if (c.login) {
+        return `<a href="https://github.com/${escapeHtml(c.login)}" target="_blank" rel="noopener" title="${escapeHtml(c.login)}">
+          <img class="contributor-avatar" src="https://github.com/${escapeHtml(c.login)}.png?size=64" alt="${escapeHtml(c.login)}">
+        </a>`;
+      }
+      const initial = escapeHtml((c.name || "?").charAt(0).toUpperCase());
+      return `<span class="contributor-avatar contributor-fallback" title="${escapeHtml(c.name || "")}">${initial}</span>`;
+    })
+    .join("");
+  const more = extra > 0 ? `<span class="contributor-more">+${extra}</span>` : "";
+  return `<span class="contributors-label">貢獻者：</span><div class="contributor-avatars">${avatars}${more}</div>`;
+}
+
 export async function renderEggDetail(root) {
   const params = new URLSearchParams(location.search);
   const repoId = params.get("repo");
@@ -42,13 +60,13 @@ export async function renderEggDetail(root) {
   const repoPagePath = { games: "/games/", applications: "/applications/", languages: "/languages/" }[repoId];
   const issueUrl = `https://github.com/Pterodactyl-TW/${egg.repo}/issues/new?title=${encodeURIComponent(`[問題回報] ${data.name || egg.name}`)}`;
 
-  const dockerRows = data.docker_images
-    ? Object.entries(data.docker_images)
-        .map(([name, image]) => `<tr><td>${escapeHtml(name)}</td><td><code>${escapeHtml(image)}</code></td></tr>`)
-        .join("")
-    : "";
+  const dockerImages = data.docker_images ? Object.entries(data.docker_images) : [];
+  const dockerRows = dockerImages
+    .map(([name, image]) => `<tr><td>${escapeHtml(name)}</td><td><code>${escapeHtml(image)}</code></td></tr>`)
+    .join("");
 
-  const variablesHtml = (data.variables || [])
+  const variables = data.variables || [];
+  const variablesHtml = variables
     .map((v) => `
       <div class="variable-card">
         <h3>${escapeHtml(v.name)}</h3>
@@ -71,71 +89,86 @@ export async function renderEggDetail(root) {
       <a href="/">首頁</a> / <a href="${escapeHtml(repoPagePath)}">${escapeHtml(repoMeta.label)}</a> / ${escapeHtml(data.name || egg.name)}
     </div>
 
-    <div class="egg-detail-header">
-      <h1>${escapeHtml(data.name || egg.name)}</h1>
-      <div class="category-label">${escapeHtml(egg.category)} · ${escapeHtml(egg.path)}</div>
+    <div class="detail-card">
+      <div class="detail-card-top">
+        <div>
+          <h1>${escapeHtml(data.name || egg.name)}</h1>
+          <span class="badge">${escapeHtml(egg.category)}</span>
+        </div>
+        <div class="actions-row">
+          <a class="btn primary" href="${escapeHtml(importUrl)}" download target="_blank" rel="noopener">⬇ 下載 Egg</a>
+          <button id="copy-url-btn">⧉ 複製網址</button>
+          <a class="btn" href="${escapeHtml(issueUrl)}" target="_blank" rel="noopener">⚠ 回報問題</a>
+        </div>
+      </div>
+      <p class="egg-description">${escapeHtml(data.description || "（無描述）")}</p>
+      <div id="contributors-box" class="contributors-row"><span class="status">正在載入貢獻者名單...</span></div>
     </div>
 
-    <div class="actions-row">
-      <a class="btn primary" href="${escapeHtml(importUrl)}" download target="_blank" rel="noopener">下載 Egg</a>
-      <button id="copy-url-btn">複製匯入網址</button>
-      <a class="btn" href="${escapeHtml(issueUrl)}" target="_blank" rel="noopener">回報問題</a>
-      <a class="btn" href="${escapeHtml(githubUrl(egg))}" target="_blank" rel="noopener">在 GitHub 上查看</a>
+    <div class="accordion">
+      <details open>
+        <summary>README</summary>
+        <div class="accordion-body">
+          <h2>${escapeHtml(data.name || egg.name)}</h2>
+          <p>${escapeHtml(data.description || "（此 Egg 尚無詳細說明）")}</p>
+          <p class="install-meta">來源路徑：<code>${escapeHtml(egg.path)}</code>，來源倉庫：
+            <a href="${escapeHtml(githubUrl(egg))}" target="_blank" rel="noopener">${escapeHtml(egg.repo)}</a>
+          </p>
+        </div>
+      </details>
+
+      ${dockerRows ? `
+        <details>
+          <summary>Docker 映像檔 (${dockerImages.length})</summary>
+          <div class="accordion-body">
+            <table class="docker-table">
+              <thead><tr><th>名稱</th><th>映像檔</th></tr></thead>
+              <tbody>${dockerRows}</tbody>
+            </table>
+          </div>
+        </details>
+      ` : ""}
+
+      ${data.startup ? `
+        <details>
+          <summary>啟動指令</summary>
+          <div class="accordion-body">
+            <pre class="script-block">${escapeHtml(data.startup)}</pre>
+          </div>
+        </details>
+      ` : ""}
+
+      ${variablesHtml ? `
+        <details>
+          <summary>變數設定 (${variables.length})</summary>
+          <div class="accordion-body">${variablesHtml}</div>
+        </details>
+      ` : ""}
+
+      ${install ? `
+        <details>
+          <summary>安裝腳本</summary>
+          <div class="accordion-body">
+            <div class="install-meta">容器映像檔：<code>${escapeHtml(install.container || "-")}</code> ・ 進入點：<code>${escapeHtml(install.entrypoint || "-")}</code></div>
+            <pre class="script-block">${escapeHtml(install.script || "")}</pre>
+          </div>
+        </details>
+      ` : ""}
     </div>
-
-    <p class="egg-description">${escapeHtml(data.description || "（無描述）")}</p>
-
-    <div id="contributors-box" class="contributors"><span class="status">正在載入貢獻者名單...</span></div>
-
-    ${dockerRows ? `
-      <div class="detail-section">
-        <h2>Docker 映像檔</h2>
-        <table class="docker-table">
-          <thead><tr><th>名稱</th><th>映像檔</th></tr></thead>
-          <tbody>${dockerRows}</tbody>
-        </table>
-      </div>
-    ` : ""}
-
-    ${variablesHtml ? `
-      <div class="detail-section">
-        <h2>變數設定</h2>
-        ${variablesHtml}
-      </div>
-    ` : ""}
-
-    ${install ? `
-      <div class="detail-section">
-        <h2>安裝腳本</h2>
-        <div class="install-meta">容器映像檔：<code>${escapeHtml(install.container || "-")}</code> ・ 進入點：<code>${escapeHtml(install.entrypoint || "-")}</code></div>
-        <pre class="script-block">${escapeHtml(install.script || "")}</pre>
-      </div>
-    ` : ""}
   `;
 
   document.getElementById("copy-url-btn").onclick = () => {
     navigator.clipboard.writeText(importUrl).then(() => {
       const btn = document.getElementById("copy-url-btn");
       btn.textContent = "已複製！";
-      setTimeout(() => { btn.textContent = "複製匯入網址"; }, 1500);
+      setTimeout(() => { btn.textContent = "⧉ 複製網址"; }, 1500);
     });
   };
 
   const contributorsBox = document.getElementById("contributors-box");
   try {
     const contributors = await loadContributors(egg);
-    if (!contributors.length) {
-      contributorsBox.innerHTML = "";
-    } else {
-      contributorsBox.innerHTML = contributors
-        .map((c) => {
-          const label = c.login || c.name;
-          return c.login
-            ? `<a class="contributor-chip" href="https://github.com/${escapeHtml(c.login)}" target="_blank" rel="noopener">${escapeHtml(label)}</a>`
-            : `<span class="contributor-chip">${escapeHtml(label)}</span>`;
-        })
-        .join("");
-    }
+    contributorsBox.innerHTML = contributors.length ? renderContributors(contributors) : "";
   } catch (_) {
     contributorsBox.innerHTML = "";
   }

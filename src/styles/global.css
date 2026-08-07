@@ -79,6 +79,30 @@ a:hover { text-decoration: underline; }
 }
 .main-nav a:hover, .main-nav a.active { color: var(--text); }
 
+.header-right { display: flex; align-items: center; gap: 14px; margin-left: auto; }
+
+.header-search {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+.header-search-icon { font-size: 0.85rem; opacity: 0.6; }
+.header-search input {
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.85rem;
+  width: 160px;
+  outline: none;
+}
+
+.header-icon-link { color: var(--text-dim); display: flex; align-items: center; }
+.header-icon-link:hover { color: var(--text); }
+
 main {
   max-width: 1100px;
   margin: 0 auto;
@@ -282,38 +306,108 @@ main {
 .breadcrumb a { color: var(--text-dim); }
 .breadcrumb a:hover { color: var(--accent); }
 
-.egg-detail-header { margin-bottom: 20px; }
-.egg-detail-header h1 { margin: 0 0 6px; font-size: 1.7rem; }
-.egg-detail-header .category-label { color: var(--text-dim); font-size: 0.9rem; }
+.detail-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 24px;
+  margin-bottom: 20px;
+}
 
-.actions-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0 26px; }
+.detail-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.detail-card-top h1 { margin: 0 0 8px; font-size: 1.5rem; }
+
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: rgba(88, 101, 242, 0.15);
+  color: var(--accent);
+  border: 1px solid rgba(88, 101, 242, 0.35);
+}
+
+.actions-row { display: flex; gap: 8px; flex-wrap: wrap; }
 .actions-row button, .actions-row a.btn {
-  padding: 10px 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
   border-radius: 8px;
   border: 1px solid var(--border);
-  background: var(--card);
+  background: var(--bg-alt);
   color: var(--text);
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
 }
 .actions-row button.primary, .actions-row a.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
 .actions-row button:hover, .actions-row a.btn:hover { background: var(--card-hover); text-decoration: none; }
 .actions-row button.primary:hover, .actions-row a.btn.primary:hover { background: var(--accent-hover); }
 
-.egg-description { color: var(--text); margin-bottom: 20px; white-space: pre-wrap; }
+.egg-description { color: var(--text-dim); margin: 16px 0 4px; white-space: pre-wrap; }
 
-.contributors { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
-.contributor-chip {
-  font-size: 0.8rem;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: var(--card);
-  border: 1px solid var(--border);
+.contributors-row { display: flex; align-items: center; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+.contributors-label { color: var(--text-dim); font-size: 0.8rem; }
+.contributor-avatars { display: flex; align-items: center; }
+.contributor-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--card);
+  margin-left: -8px;
+  object-fit: cover;
+  background: var(--bg-alt);
+}
+.contributor-avatar:first-child { margin-left: 0; }
+.contributor-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+.contributor-more {
+  margin-left: 6px;
+  font-size: 0.75rem;
   color: var(--text-dim);
 }
 
-.detail-section { margin: 34px 0; }
-.detail-section h2 { font-size: 1.15rem; margin-bottom: 12px; }
+/* Accordion */
+.accordion { display: flex; flex-direction: column; gap: 10px; }
+.accordion details {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.accordion summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 16px 20px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.accordion summary::-webkit-details-marker { display: none; }
+.accordion summary::after {
+  content: "▾";
+  color: var(--text-dim);
+  transition: transform 0.15s;
+}
+.accordion details[open] summary::after { transform: rotate(180deg); }
+.accordion summary:hover { background: var(--card-hover); }
+.accordion-body { padding: 0 20px 20px; }
+.accordion-body h2 { margin-top: 0; font-size: 1.25rem; }
+.accordion-body > p:last-child { margin-bottom: 0; }
 
 .docker-table, .var-table {
   width: 100%;

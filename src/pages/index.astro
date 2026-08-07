@@ -115,22 +115,30 @@ const categories = [
     filtered.slice(0, 60).forEach((egg) => gridEl.appendChild(renderEggCard(egg)));
   }
 
-  let debounce;
-  searchInput.addEventListener("input", async (e) => {
-    const term = e.target.value.trim().toLowerCase();
-    clearTimeout(debounce);
+  async function runSearch(term) {
     if (!term) {
       searchResults.hidden = true;
       defaultSections.hidden = false;
       return;
     }
-    debounce = setTimeout(async () => {
-      defaultSections.hidden = true;
-      searchResults.hidden = false;
-      await ensureAllEggsLoaded();
-      renderSearch(term);
-    }, 150);
+    defaultSections.hidden = true;
+    searchResults.hidden = false;
+    await ensureAllEggsLoaded();
+    renderSearch(term);
+  }
+
+  let debounce;
+  searchInput.addEventListener("input", (e) => {
+    clearTimeout(debounce);
+    debounce = setTimeout(() => runSearch(e.target.value.trim().toLowerCase()), 150);
   });
+
+  // 支援從 header 的搜尋框以 ?q=關鍵字 導向首頁並直接顯示搜尋結果
+  const initialQuery = new URLSearchParams(location.search).get("q");
+  if (initialQuery) {
+    searchInput.value = initialQuery;
+    runSearch(initialQuery.trim().toLowerCase());
+  }
 
   async function loadRecent() {
     recentStatusEl.textContent = "正在載入最近更新的 Egg...";
