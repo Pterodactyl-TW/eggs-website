@@ -10,6 +10,7 @@
     "fetch:recent": "node scripts/fetch-recent.mjs"
   },
   "dependencies": {
-    "astro": "^4.16.0"
+    "astro": "^4.16.0",
+    "marked": "^18.0.9"
   }
 }

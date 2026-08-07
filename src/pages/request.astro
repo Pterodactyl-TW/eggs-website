@@ -1,23 +1,24 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { ICONS } from "../lib/icons.js";
 
 const targets = [
   {
-    icon: "🎮",
+    icon: ICONS.gamepad,
     title: "遊戲",
     desc: "適用於所有遊戲伺服器 Egg。",
     href: "https://github.com/Pterodactyl-TW/game-eggs/issues",
     cta: "請求遊戲 Egg",
   },
   {
-    icon: "📦",
+    icon: ICONS.package,
     title: "應用程式",
     desc: "適用於非遊戲類的應用程式。",
     href: "https://github.com/Pterodactyl-TW/application-eggs/issues",
     cta: "請求應用程式 Egg",
   },
   {
-    icon: "💻",
+    icon: ICONS.code,
     title: "語言",
     desc: "適用於 Python、Node.js 等通用語言 Egg。",
     href: "https://github.com/Pterodactyl-TW/generic-eggs/issues",
@@ -43,7 +44,7 @@ const targets = [
   <div class="category-grid">
     {targets.map((t) => (
       <a class="category-card" href={t.href} target="_blank" rel="noopener">
-        <span class="icon">{t.icon}</span>
+        <span class="icon icon-wrap" set:html={t.icon} />
         <h3>{t.title}</h3>
         <p>{t.desc}</p>
         <span class="cta">{t.cta} →</span>

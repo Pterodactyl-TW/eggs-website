@@ -1,6 +1,7 @@
 ---
 const { title, description = "Pterodactyl-TW 繁體中文化 Eggs 資源庫，瀏覽、搜尋並取得可直接匯入 Panel 的 Egg 設定檔。", active = "" } = Astro.props;
 import "../styles/global.css";
+import { ICONS } from "../lib/icons.js";
 
 const navItems = [
   { href: "/", label: "首頁", id: "home" },
@@ -33,7 +34,7 @@ const navItems = [
       </nav>
       <div class="header-right">
         <form action="/" method="get" class="header-search">
-          <span class="header-search-icon">🔍</span>
+          <span class="header-search-icon icon-wrap" set:html={ICONS.search} />
           <input type="text" name="q" placeholder="搜尋 Egg..." autocomplete="off">
         </form>
         <a class="header-icon-link" href="https://github.com/Pterodactyl-TW" target="_blank" rel="noopener" aria-label="GitHub">

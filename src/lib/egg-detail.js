@@ -1,7 +1,26 @@
+import { marked } from "marked";
 import { REPOS, ORG, findEgg, loadContributors, rawUrl, githubUrl, escapeHtml } from "./eggs-client.js";
+import { ICONS } from "./icons.js";
 
 function commitsUrl(egg) {
   return `https://github.com/${ORG}/${egg.repo}/commits/${egg.branch}/${egg.path}`;
+}
+
+// 嘗試抓取 egg 檔案所在資料夾底下的 README.md（大小寫皆嘗試），
+// 找不到就回傳 null，由呼叫端退回使用 egg 的 description 欄位。
+async function fetchFolderReadme(egg) {
+  const folder = egg.path.split("/").slice(0, -1).join("/");
+  const candidates = ["README.md", "Readme.md", "readme.md"];
+  for (const filename of candidates) {
+    const url = `https://raw.githubusercontent.com/${ORG}/${egg.repo}/${egg.branch}/${folder ? folder + "/" : ""}${filename}`;
+    try {
+      const res = await fetch(url);
+      if (res.ok) return res.text();
+    } catch (_) {
+      // 試下一個檔名
+    }
+  }
+  return null;
 }
 
 function renderContributors(contributors, commitHistoryUrl) {
@@ -23,7 +42,7 @@ function renderContributors(contributors, commitHistoryUrl) {
     ? `<a class="contributor-more" href="${escapeHtml(commitHistoryUrl)}" target="_blank" rel="noopener">+${extra}</a>`
     : "";
   return `
-    <div class="contributors-heading">👥 貢獻者（${contributors.length}）</div>
+    <div class="contributors-heading"><span class="icon-wrap">${ICONS.users}</span> 貢獻者（${contributors.length}）</div>
     <div class="contributor-avatars">${avatars}${more}</div>
   `;
 }
@@ -91,8 +110,8 @@ export async function renderEggDetail(root) {
         ${v.description ? `<p class="var-desc">${escapeHtml(v.description)}</p>` : ""}
         <div class="var-pills">
           <span class="var-pill">預設值：<code>${escapeHtml(v.default_value || "無")}</code></span>
-          <span class="var-pill ${v.user_viewable ? "on" : "off"}">${v.user_viewable ? "👁 使用者可見" : "🚫 使用者不可見"}</span>
-          <span class="var-pill ${v.user_editable ? "on" : "off"}">${v.user_editable ? "✏️ 可編輯" : "🔒 唯讀"}</span>
+          <span class="var-pill ${v.user_viewable ? "on" : "off"}"><span class="icon-wrap">${v.user_viewable ? ICONS.eye : ICONS.eyeOff}</span> ${v.user_viewable ? "使用者可見" : "使用者不可見"}</span>
+          <span class="var-pill ${v.user_editable ? "on" : "off"}"><span class="icon-wrap">${v.user_editable ? ICONS.edit : ICONS.lock}</span> ${v.user_editable ? "可編輯" : "唯讀"}</span>
           ${v.rules ? `<span class="var-pill">規則：<code>${escapeHtml(v.rules)}</code></span>` : ""}
         </div>
       </div>
@@ -113,9 +132,9 @@ export async function renderEggDetail(root) {
           <span class="badge">${escapeHtml(egg.category)}</span>
         </div>
         <div class="actions-row">
-          <button class="btn primary" id="download-egg-btn">⬇ 下載 Egg</button>
-          <button id="copy-url-btn">⧉ 複製網址</button>
-          <a class="btn" href="${escapeHtml(issueUrl)}" target="_blank" rel="noopener">⚠ 回報問題</a>
+          <button class="btn primary" id="download-egg-btn"><span class="icon-wrap">${ICONS.download}</span> 下載 Egg</button>
+          <button id="copy-url-btn"><span class="icon-wrap">${ICONS.copy}</span> 複製網址</button>
+          <a class="btn" href="${escapeHtml(issueUrl)}" target="_blank" rel="noopener"><span class="icon-wrap">${ICONS.alert}</span> 回報問題</a>
         </div>
       </div>
       <p class="egg-description">${escapeHtml(data.description || "（無描述）")}</p>
@@ -125,12 +144,8 @@ export async function renderEggDetail(root) {
     <div class="accordion">
       <details open>
         <summary>README</summary>
-        <div class="accordion-body">
-          <h2>${escapeHtml(data.name || egg.name)}</h2>
-          <p>${escapeHtml(data.description || "（此 Egg 尚無詳細說明）")}</p>
-          <p class="install-meta">來源路徑：<code>${escapeHtml(egg.path)}</code>，來源倉庫：
-            <a href="${escapeHtml(githubUrl(egg))}" target="_blank" rel="noopener">${escapeHtml(egg.repo)}</a>
-          </p>
+        <div class="accordion-body markdown-body" id="readme-body">
+          <p class="status">正在載入 README...</p>
         </div>
       </details>
 
@@ -180,8 +195,8 @@ export async function renderEggDetail(root) {
   document.getElementById("copy-url-btn").onclick = () => {
     navigator.clipboard.writeText(importUrl).then(() => {
       const btn = document.getElementById("copy-url-btn");
-      btn.textContent = "已複製！";
-      setTimeout(() => { btn.textContent = "⧉ 複製網址"; }, 1500);
+      btn.innerHTML = `<span class="icon-wrap">${ICONS.copy}</span> 已複製！`;
+      setTimeout(() => { btn.innerHTML = `<span class="icon-wrap">${ICONS.copy}</span> 複製網址`; }, 1500);
     });
   };
 
@@ -198,6 +213,30 @@ export async function renderEggDetail(root) {
     a.remove();
     URL.revokeObjectURL(blobUrl);
   };
+
+  const readmeBody = document.getElementById("readme-body");
+  try {
+    const readmeMarkdown = await fetchFolderReadme(egg);
+    if (readmeMarkdown) {
+      readmeBody.innerHTML = marked.parse(readmeMarkdown);
+    } else {
+      readmeBody.innerHTML = `
+        <h2>${escapeHtml(data.name || egg.name)}</h2>
+        <p>${escapeHtml(data.description || "（此 Egg 尚無詳細說明）")}</p>
+      `;
+    }
+  } catch (err) {
+    console.error("載入 README 失敗：", err);
+    readmeBody.innerHTML = `
+      <h2>${escapeHtml(data.name || egg.name)}</h2>
+      <p>${escapeHtml(data.description || "（此 Egg 尚無詳細說明）")}</p>
+    `;
+  }
+  readmeBody.insertAdjacentHTML("beforeend", `
+    <p class="install-meta">來源路徑：<code>${escapeHtml(egg.path)}</code>，來源倉庫：
+      <a href="${escapeHtml(githubUrl(egg))}" target="_blank" rel="noopener">${escapeHtml(egg.repo)}</a>
+    </p>
+  `);
 
   const contributorsBox = document.getElementById("contributors-box");
   try {

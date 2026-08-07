@@ -1,11 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { ICONS } from "../lib/icons.js";
 ---
 <Layout title="語言" active="languages" description="瀏覽所有繁體中文化的通用語言 Egg，涵蓋 Python、Node.js、Go 等。">
   <div class="breadcrumb"><a href="/">首頁</a> / 語言</div>
 
   <div class="page-header">
-    <div class="page-icon">💻</div>
+    <div class="page-icon icon-wrap" set:html={ICONS.code} />
     <div>
       <h1>語言 Eggs</h1>
       <p class="page-subtitle" id="egg-count-label">載入中...</p>

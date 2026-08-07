@@ -1,23 +1,24 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { ICONS } from "../lib/icons.js";
 
 const categories = [
   {
-    icon: "🎮",
+    icon: ICONS.gamepad,
     title: "遊戲",
     desc: "遊戲伺服器 Egg，涵蓋 Minecraft、ARK、CS 等。",
     href: "/games/",
     cta: "瀏覽遊戲",
   },
   {
-    icon: "📦",
+    icon: ICONS.package,
     title: "應用程式",
     desc: "應用程式 Egg，涵蓋資料庫、機器人與各種服務。",
     href: "/applications/",
     cta: "瀏覽應用程式",
   },
   {
-    icon: "💻",
+    icon: ICONS.code,
     title: "語言",
     desc: "通用語言 Egg，涵蓋 Python、Node.js、Go 等。",
     href: "/languages/",
@@ -44,7 +45,7 @@ const categories = [
     <div class="category-grid">
       {categories.map((cat) => (
         <a class="category-card" href={cat.href}>
-          <span class="icon">{cat.icon}</span>
+          <span class="icon icon-wrap" set:html={cat.icon} />
           <h3>{cat.title}</h3>
           <p>{cat.desc}</p>
           <span class="cta">{cat.cta} →</span>
