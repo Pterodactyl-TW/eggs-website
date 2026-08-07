@@ -5,12 +5,13 @@ const MAX_CATEGORY_CHIPS = 30;
 export async function mountEggBrowser({ repoId, gridEl, statusEl, searchEl, categoryFiltersEl }) {
   const state = { eggs: [], activeCategory: "all", searchTerm: "" };
 
-  statusEl.textContent = "正在從 GitHub 即時載入 Egg 清單...";
+  statusEl.textContent = "正在載入 Egg 清單...";
   try {
     state.eggs = repoId ? await loadRepoEggs(repoId) : (await loadAllEggs()).eggs;
-    statusEl.textContent = `已即時載入 ${state.eggs.length} 個 Egg。`;
+    statusEl.textContent = `已載入 ${state.eggs.length} 個 Egg。`;
   } catch (err) {
-    statusEl.textContent = `載入失敗：${err.message}`;
+    console.error("載入 Egg 清單失敗：", err);
+    statusEl.textContent = "載入 Egg 清單時發生問題，請稍後再試。";
     return;
   }
 

@@ -90,16 +90,18 @@ const categories = [
 
   async function ensureAllEggsLoaded() {
     if (eggsLoaded) return;
-    statusEl.textContent = "正在從 GitHub 即時載入 Egg 清單...";
+    statusEl.textContent = "正在載入 Egg 清單...";
     try {
       const { eggs, errors } = await loadAllEggs();
       allEggs = eggs;
       eggsLoaded = true;
+      if (errors.length) console.error("部分 Egg 來源載入失敗：", errors);
       statusEl.textContent = errors.length
-        ? `已載入 ${eggs.length} 個 Egg，但部分來源載入失敗：${errors.join("；")}`
-        : `已即時載入 ${eggs.length} 個 Egg。`;
+        ? `已載入 ${eggs.length} 個 Egg，但部分資料目前無法載入，請稍後再試。`
+        : `已載入 ${eggs.length} 個 Egg。`;
     } catch (err) {
-      statusEl.textContent = `載入失敗：${err.message}`;
+      console.error("載入 Egg 清單失敗：", err);
+      statusEl.textContent = "載入 Egg 清單時發生問題，請稍後再試。";
     }
   }
 
@@ -161,11 +163,11 @@ const categories = [
       if (!recent.length) throw new Error("empty");
       recentStatusEl.textContent = "";
       renderRecentList(recent);
-    } catch (_) {
-      // 本機開發環境尚未產生這份資料時，誠實顯示，而不是用隨機 Egg 假裝是「最近變更」
+    } catch (err) {
+      // 開發用的技術性訊息只印在 console，畫面上不顯示任何面向開發者的內容
+      console.info('尚未產生「最近變更」資料：執行 `GITHUB_TOKEN=<token> npm run fetch:recent` 後重新整理即可看到本機資料。');
       recentGridEl.innerHTML = "";
-      recentStatusEl.textContent =
-        "本機開發環境尚未產生「最近變更」資料。執行 GITHUB_TOKEN=你的token npm run fetch:recent 產生 public/recent-eggs.json 後重新整理即可看到真實資料。";
+      recentStatusEl.textContent = "";
     }
   }
 

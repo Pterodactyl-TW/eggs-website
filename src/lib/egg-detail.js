@@ -37,9 +37,10 @@ export async function renderEggDetail(root) {
   let egg;
   try {
     egg = await findEgg(repoId, path);
-    if (!egg) throw new Error("在倉庫中找不到這個 Egg 檔案");
+    if (!egg) throw new Error("egg not found in repo tree");
   } catch (err) {
-    root.innerHTML = `<p class="status">載入失敗：${escapeHtml(err.message)}</p>`;
+    console.error("找不到這個 Egg：", err);
+    root.innerHTML = `<p class="status">找不到這個 Egg，可能已被移除或網址不正確。</p>`;
     return;
   }
 
@@ -49,7 +50,8 @@ export async function renderEggDetail(root) {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     data = await res.json();
   } catch (err) {
-    root.innerHTML = `<p class="status">載入 Egg 內容失敗：${escapeHtml(err.message)}</p>`;
+    console.error("載入 Egg 內容失敗：", err);
+    root.innerHTML = `<p class="status">載入這個 Egg 的內容時發生問題，請稍後再試。</p>`;
     return;
   }
 
