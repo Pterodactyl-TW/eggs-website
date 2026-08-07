@@ -1,24 +1,31 @@
-import { REPOS, findEgg, loadContributors, rawUrl, githubUrl, escapeHtml } from "./eggs-client.js";
+import { REPOS, ORG, findEgg, loadContributors, rawUrl, githubUrl, escapeHtml } from "./eggs-client.js";
 
 function boolMark(v) {
   return v ? "✅" : "❌";
 }
 
-function renderContributors(contributors) {
+function commitsUrl(egg) {
+  return `https://github.com/${ORG}/${egg.repo}/commits/${egg.branch}/${egg.path}`;
+}
+
+function renderContributors(contributors, commitHistoryUrl) {
   const shown = contributors.slice(0, 5);
   const extra = contributors.length - shown.length;
   const avatars = shown
     .map((c) => {
+      const label = c.login || c.name || "";
       if (c.login) {
-        return `<a href="https://github.com/${escapeHtml(c.login)}" target="_blank" rel="noopener" title="${escapeHtml(c.login)}">
-          <img class="contributor-avatar" src="https://github.com/${escapeHtml(c.login)}.png?size=64" alt="${escapeHtml(c.login)}">
+        return `<a href="${escapeHtml(commitHistoryUrl)}" target="_blank" rel="noopener" title="${escapeHtml(label)}">
+          <img class="contributor-avatar" src="https://github.com/${escapeHtml(c.login)}.png?size=64" alt="${escapeHtml(label)}">
         </a>`;
       }
       const initial = escapeHtml((c.name || "?").charAt(0).toUpperCase());
-      return `<span class="contributor-avatar contributor-fallback" title="${escapeHtml(c.name || "")}">${initial}</span>`;
+      return `<a class="contributor-avatar contributor-fallback" href="${escapeHtml(commitHistoryUrl)}" target="_blank" rel="noopener" title="${escapeHtml(label)}">${initial}</a>`;
     })
     .join("");
-  const more = extra > 0 ? `<span class="contributor-more">+${extra}</span>` : "";
+  const more = extra > 0
+    ? `<a class="contributor-more" href="${escapeHtml(commitHistoryUrl)}" target="_blank" rel="noopener">+${extra}</a>`
+    : "";
   return `<span class="contributors-label">貢獻者：</span><div class="contributor-avatars">${avatars}${more}</div>`;
 }
 
@@ -170,7 +177,7 @@ export async function renderEggDetail(root) {
   const contributorsBox = document.getElementById("contributors-box");
   try {
     const contributors = await loadContributors(egg);
-    contributorsBox.innerHTML = contributors.length ? renderContributors(contributors) : "";
+    contributorsBox.innerHTML = contributors.length ? renderContributors(contributors, commitsUrl(egg)) : "";
   } catch (_) {
     contributorsBox.innerHTML = "";
   }
