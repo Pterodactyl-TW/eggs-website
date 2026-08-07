@@ -11,9 +11,8 @@ export const REPOS = {
 
 const CACHE_TTL_MS = 15 * 60 * 1000;
 // api.github.com 未登入時每小時只有 60 次配額，commit 相關查詢很容易把它用光，
-// 所以「最近更新」「貢獻者」這類非必要功能快取要拉長，且掃描筆數要壓低。
+// 所以像「貢獻者」這類非必要功能快取要拉長。
 const GITHUB_API_CACHE_TTL_MS = 60 * 60 * 1000;
-const COMMITS_TO_SCAN = 4;
 
 function cacheGet(key, ttl) {
   try {
@@ -180,53 +179,13 @@ export async function loadContributors(egg) {
   }
 }
 
-// 抓取每個倉庫最近的幾筆 commit，整理出「最近更新」的 Egg 清單（含更新時間）。
-export async function loadRecentlyUpdated(limitPerRepo = COMMITS_TO_SCAN, take = 8) {
-  const cacheKey = "eggs-tw:recent";
-  const cached = cacheGet(cacheKey, GITHUB_API_CACHE_TTL_MS);
-  if (cached) return cached;
-
-  const { eggs } = await loadAllEggs();
-  const eggByPath = {};
-  eggs.forEach((egg) => {
-    eggByPath[`${egg.repo}:${egg.path}`] = egg;
-  });
-
-  const updates = [];
-  await Promise.allSettled(
-    Object.values(REPOS).map(async (repo) => {
-      try {
-        const commits = await fetchJson(
-          `https://api.github.com/repos/${ORG}/${repo.key}/commits?per_page=${limitPerRepo}`
-        );
-        for (const commit of commits) {
-          try {
-            const detail = await fetchJson(
-              `https://api.github.com/repos/${ORG}/${repo.key}/commits/${commit.sha}`
-            );
-            for (const file of detail.files || []) {
-              if (!/^egg-.*\.json$/i.test(file.filename.split("/").pop())) continue;
-              const egg = eggByPath[`${repo.key}:${file.filename}`];
-              if (!egg) continue;
-              const date = commit.commit?.author?.date || commit.commit?.committer?.date;
-              if (!updates.find((u) => u.egg.path === egg.path && u.egg.repo === egg.repo)) {
-                updates.push({ egg, date });
-              }
-            }
-          } catch (_) {
-            // 忽略單一 commit 抓取失敗
-          }
-        }
-      } catch (_) {
-        // 忽略單一倉庫抓取失敗
-      }
-    })
-  );
-
-  updates.sort((a, b) => new Date(b.date) - new Date(a.date));
-  const result = updates.slice(0, take);
-  if (result.length) cacheSet(cacheKey, result);
-  return result;
+// 「最近更新」清單改為部署時透過 scripts/fetch-recent.mjs 預先產生的 public/recent-eggs.json，
+// 避免每個訪客都即時呼叫 api.github.com 的 commits API（未登入額度很容易被打爆）。
+// 本機開發環境沒有這個檔案時，由呼叫端（index.astro）自行退回顯示隨機抽樣的 Egg。
+export async function loadRecentlyUpdated() {
+  const res = await fetch("/recent-eggs.json");
+  if (!res.ok) throw new Error("尚未產生最近更新資料（本機開發環境屬正常情況）");
+  return res.json();
 }
 
 export function escapeHtml(str) {

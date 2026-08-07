@@ -52,7 +52,7 @@ const categories = [
       ))}
     </div>
 
-    <h2 class="section-title">最近更新</h2>
+    <h2 id="recent-title" class="section-title">最近更新</h2>
     <section id="recent-status" class="status"></section>
     <section id="recent-grid" class="egg-grid"></section>
   </div>
@@ -140,23 +140,33 @@ const categories = [
     runSearch(initialQuery.trim().toLowerCase());
   }
 
+  const recentTitleEl = document.getElementById("recent-title");
+
+  function renderRecentList(list) {
+    recentGridEl.innerHTML = "";
+    list.forEach(({ egg, date }) => {
+      const dateStr = date ? new Date(date).toLocaleDateString("zh-TW") : "";
+      recentGridEl.appendChild(
+        renderEggCard(egg, dateStr ? `<div class="egg-date">最後更新：${dateStr}</div>` : "")
+      );
+    });
+  }
+
   async function loadRecent() {
     recentStatusEl.textContent = "正在載入最近更新的 Egg...";
     try {
+      // 正式環境：讀取部署時預先產生好的靜態資料，不佔用 api.github.com 的即時額度
       const recent = await loadRecentlyUpdated();
       recentStatusEl.textContent = "";
-      if (!recent.length) {
-        recentStatusEl.textContent = "目前沒有可顯示的最近更新資料。";
-        return;
-      }
-      recent.forEach(({ egg, date }) => {
-        const dateStr = date ? new Date(date).toLocaleDateString("zh-TW") : "";
-        recentGridEl.appendChild(
-          renderEggCard(egg, dateStr ? `<div class="egg-date">最後更新：${dateStr}</div>` : "")
-        );
-      });
-    } catch (err) {
-      recentStatusEl.textContent = `載入失敗：${err.message}`;
+      if (!recent.length) throw new Error("empty");
+      renderRecentList(recent);
+    } catch (_) {
+      // 本機開發環境（尚未跑過 scripts/fetch-recent.mjs）：退回隨機抽樣，不呼叫 GitHub API
+      recentTitleEl.textContent = "精選 Egg（本機開發模式，隨機顯示）";
+      await ensureAllEggsLoaded();
+      recentStatusEl.textContent = allEggs.length ? "" : "目前沒有可顯示的 Egg。";
+      const sample = [...allEggs].sort(() => Math.random() - 0.5).slice(0, 8);
+      renderRecentList(sample.map((egg) => ({ egg, date: null })));
     }
   }
 
