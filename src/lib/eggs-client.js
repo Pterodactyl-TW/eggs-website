@@ -10,7 +10,10 @@ export const REPOS = {
 };
 
 const CACHE_TTL_MS = 15 * 60 * 1000;
-const COMMITS_TO_SCAN = 8;
+// api.github.com 未登入時每小時只有 60 次配額，commit 相關查詢很容易把它用光，
+// 所以「最近更新」「貢獻者」這類非必要功能快取要拉長，且掃描筆數要壓低。
+const GITHUB_API_CACHE_TTL_MS = 60 * 60 * 1000;
+const COMMITS_TO_SCAN = 4;
 
 function cacheGet(key, ttl) {
   try {
@@ -38,11 +41,26 @@ async function fetchJson(url) {
   return res.json();
 }
 
-async function fetchRepoTree(repoKey) {
-  const cacheKey = `eggs-tw:${repoKey}:tree`;
-  const cached = cacheGet(cacheKey, CACHE_TTL_MS);
-  if (cached) return cached;
+// 優先透過 jsDelivr 的 data API 取得檔案樹：不佔用 api.github.com 每小時 60 次的配額，
+// 且有 CDN 快取，速度更快也更穩定。只有 jsDelivr 失敗時才退回 GitHub API。
+async function fetchRepoTreeViaJsdelivr(repoKey) {
+  for (const branch of ["main", "master"]) {
+    try {
+      const data = await fetchJson(
+        `https://data.jsdelivr.com/v1/packages/gh/${ORG}/${repoKey}@${branch}?structure=flat`
+      );
+      const tree = (data.files || [])
+        .filter((f) => /^egg-.*\.json$/i.test(f.name.split("/").pop()))
+        .map((f) => ({ path: f.name.replace(/^\//, "") }));
+      if (tree.length) return { branch, tree };
+    } catch (_) {
+      // 試下一個分支名稱
+    }
+  }
+  throw new Error("jsDelivr 沒有回傳任何 Egg 檔案");
+}
 
+async function fetchRepoTreeViaGithubApi(repoKey) {
   for (const branch of ["main", "master"]) {
     try {
       const data = await fetchJson(
@@ -51,14 +69,27 @@ async function fetchRepoTree(repoKey) {
       const tree = (data.tree || []).filter(
         (item) => item.type === "blob" && /^egg-.*\.json$/i.test(item.path.split("/").pop())
       );
-      const result = { branch, tree };
-      cacheSet(cacheKey, result);
-      return result;
+      return { branch, tree };
     } catch (_) {
       // 試下一個分支名稱
     }
   }
   throw new Error(`無法取得 ${repoKey} 的檔案樹`);
+}
+
+async function fetchRepoTree(repoKey) {
+  const cacheKey = `eggs-tw:${repoKey}:tree`;
+  const cached = cacheGet(cacheKey, CACHE_TTL_MS);
+  if (cached) return cached;
+
+  let result;
+  try {
+    result = await fetchRepoTreeViaJsdelivr(repoKey);
+  } catch (_) {
+    result = await fetchRepoTreeViaGithubApi(repoKey);
+  }
+  cacheSet(cacheKey, result);
+  return result;
 }
 
 function categoryOf(path) {
@@ -125,7 +156,7 @@ export async function findEgg(repoId, path) {
 // 抓取某個檔案的 commit 作者清單，作為「貢獻者」列表（依 GitHub commit 歷史，非 egg 檔內建欄位）。
 export async function loadContributors(egg) {
   const cacheKey = `eggs-tw:contributors:${egg.repo}:${egg.path}`;
-  const cached = cacheGet(cacheKey, CACHE_TTL_MS);
+  const cached = cacheGet(cacheKey, GITHUB_API_CACHE_TTL_MS);
   if (cached) return cached;
 
   try {
@@ -152,7 +183,7 @@ export async function loadContributors(egg) {
 // 抓取每個倉庫最近的幾筆 commit，整理出「最近更新」的 Egg 清單（含更新時間）。
 export async function loadRecentlyUpdated(limitPerRepo = COMMITS_TO_SCAN, take = 8) {
   const cacheKey = "eggs-tw:recent";
-  const cached = cacheGet(cacheKey, CACHE_TTL_MS);
+  const cached = cacheGet(cacheKey, GITHUB_API_CACHE_TTL_MS);
   if (cached) return cached;
 
   const { eggs } = await loadAllEggs();
@@ -194,7 +225,7 @@ export async function loadRecentlyUpdated(limitPerRepo = COMMITS_TO_SCAN, take =
 
   updates.sort((a, b) => new Date(b.date) - new Date(a.date));
   const result = updates.slice(0, take);
-  cacheSet(cacheKey, result);
+  if (result.length) cacheSet(cacheKey, result);
   return result;
 }
 
