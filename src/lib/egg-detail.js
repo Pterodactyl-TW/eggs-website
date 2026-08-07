@@ -26,7 +26,10 @@ function renderContributors(contributors, commitHistoryUrl) {
   const more = extra > 0
     ? `<a class="contributor-more" href="${escapeHtml(commitHistoryUrl)}" target="_blank" rel="noopener">+${extra}</a>`
     : "";
-  return `<span class="contributors-label">貢獻者：</span><div class="contributor-avatars">${avatars}${more}</div>`;
+  return `
+    <div class="contributors-heading">👥 貢獻者（${contributors.length}）</div>
+    <div class="contributor-avatars">${avatars}${more}</div>
+  `;
 }
 
 export async function renderEggDetail(root) {

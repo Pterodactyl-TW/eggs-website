@@ -415,8 +415,17 @@ main {
 
 .egg-description { color: var(--text-dim); margin: 16px 0 4px; white-space: pre-wrap; }
 
-.contributors-row { display: flex; align-items: center; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
-.contributors-label { color: var(--text-dim); font-size: 0.8rem; }
+.contributors-row {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.contributors-heading {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+}
 .contributor-avatars { display: flex; align-items: center; }
 .contributor-avatar {
   width: 40px;
