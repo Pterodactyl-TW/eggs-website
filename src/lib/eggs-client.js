@@ -4,9 +4,9 @@
 export const ORG = "Pterodactyl-TW";
 
 export const REPOS = {
-  games: { key: "game-eggs", label: "遊戲", icon: "🎮" },
-  applications: { key: "application-eggs", label: "應用程式", icon: "📦" },
-  languages: { key: "generic-eggs", label: "語言", icon: "💻" },
+  games: { key: "game-eggs", label: "遊戲" },
+  applications: { key: "application-eggs", label: "應用程式" },
+  languages: { key: "generic-eggs", label: "語言" },
 };
 
 const CACHE_TTL_MS = 15 * 60 * 1000;
