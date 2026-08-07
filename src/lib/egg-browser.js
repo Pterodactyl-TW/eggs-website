@@ -1,4 +1,4 @@
-import { loadRepoEggs, loadAllEggs, escapeHtml } from "./eggs-client.js";
+import { loadRepoEggs, loadAllEggs, escapeHtml, eggDetailUrl } from "./eggs-client.js";
 
 const MAX_CATEGORY_CHIPS = 30;
 
@@ -52,8 +52,9 @@ export async function mountEggBrowser({ repoId, gridEl, statusEl, searchEl, cate
       return;
     }
     list.slice(0, 400).forEach((egg) => {
-      const card = document.createElement("div");
+      const card = document.createElement("a");
       card.className = "egg-card";
+      card.href = eggDetailUrl(egg);
       card.innerHTML = `
         <h3>${escapeHtml(egg.name)}</h3>
         <div class="egg-desc">${escapeHtml(egg.path)}</div>
@@ -62,7 +63,6 @@ export async function mountEggBrowser({ repoId, gridEl, statusEl, searchEl, cate
           <span class="egg-tag">${escapeHtml(egg.category)}</span>
         </div>
       `;
-      card.onclick = () => window.openEggModal(egg);
       gridEl.appendChild(card);
     });
   }

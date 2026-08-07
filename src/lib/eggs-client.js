@@ -110,6 +110,45 @@ export function githubUrl(egg) {
   return `https://github.com/${ORG}/${egg.repo}/blob/${egg.branch}/${egg.path}`;
 }
 
+// 產生指向詳細頁面的連結（詳細頁再依 repoId + path 即時重新查找該 egg）。
+export function eggDetailUrl(egg) {
+  const params = new URLSearchParams({ repo: egg.repoId, path: egg.path });
+  return `/egg/?${params.toString()}`;
+}
+
+// 詳細頁面用：依 repoId 找出對應的 egg（重用 loadRepoEggs 的快取）。
+export async function findEgg(repoId, path) {
+  const eggs = await loadRepoEggs(repoId);
+  return eggs.find((e) => e.path === path) || null;
+}
+
+// 抓取某個檔案的 commit 作者清單，作為「貢獻者」列表（依 GitHub commit 歷史，非 egg 檔內建欄位）。
+export async function loadContributors(egg) {
+  const cacheKey = `eggs-tw:contributors:${egg.repo}:${egg.path}`;
+  const cached = cacheGet(cacheKey, CACHE_TTL_MS);
+  if (cached) return cached;
+
+  try {
+    const commits = await fetchJson(
+      `https://api.github.com/repos/${ORG}/${egg.repo}/commits?path=${encodeURIComponent(egg.path)}&per_page=100`
+    );
+    const seen = new Set();
+    const contributors = [];
+    for (const commit of commits) {
+      const login = commit.author?.login;
+      const name = commit.commit?.author?.name || commit.commit?.author?.email;
+      const key = login || name;
+      if (!key || seen.has(key)) continue;
+      seen.add(key);
+      contributors.push({ login, name });
+    }
+    cacheSet(cacheKey, contributors);
+    return contributors;
+  } catch (_) {
+    return [];
+  }
+}
+
 // 抓取每個倉庫最近的幾筆 commit，整理出「最近更新」的 Egg 清單（含更新時間）。
 export async function loadRecentlyUpdated(limitPerRepo = COMMITS_TO_SCAN, take = 8) {
   const cacheKey = "eggs-tw:recent";

@@ -59,7 +59,7 @@ const categories = [
 </Layout>
 
 <script>
-  import { loadAllEggs, loadRecentlyUpdated, escapeHtml } from "../lib/eggs-client.js";
+  import { loadAllEggs, loadRecentlyUpdated, escapeHtml, eggDetailUrl } from "../lib/eggs-client.js";
 
   const searchInput = document.getElementById("search-input");
   const searchResults = document.getElementById("search-results");
@@ -73,8 +73,9 @@ const categories = [
   let eggsLoaded = false;
 
   function renderEggCard(egg, extraHtml = "") {
-    const card = document.createElement("div");
+    const card = document.createElement("a");
     card.className = "egg-card";
+    card.href = eggDetailUrl(egg);
     card.innerHTML = `
       <h3>${escapeHtml(egg.name)}</h3>
       <div class="egg-desc">${escapeHtml(egg.path)}</div>
@@ -84,7 +85,6 @@ const categories = [
       </div>
       ${extraHtml}
     `;
-    card.onclick = () => window.openEggModal(egg);
     return card;
   }
 

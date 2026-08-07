@@ -1,0 +1,11 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+<Layout title="Egg 詳細資料" description="查看 Pterodactyl-TW 繁體中文化 Egg 的詳細資料，包含變數設定、安裝腳本與 Docker 映像檔。">
+  <div id="egg-detail-root"></div>
+</Layout>
+
+<script>
+  import { renderEggDetail } from "../lib/egg-detail.js";
+  renderEggDetail(document.getElementById("egg-detail-root"));
+</script>
