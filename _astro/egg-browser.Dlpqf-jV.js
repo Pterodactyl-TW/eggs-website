@@ -1,0 +1,8 @@
+import{a as p,b as C,c as f,e as o}from"./eggs-client.QxOMjQGX.js";const h=30;async function y({repoId:u,gridEl:i,statusEl:g,searchEl:m,categoryFiltersEl:r}){const a={eggs:[],activeCategory:"all",searchTerm:""};g.textContent="正在從 GitHub 即時載入 Egg 清單...";try{a.eggs=u?await p(u):(await C()).eggs,g.textContent=`已即時載入 ${a.eggs.length} 個 Egg。`}catch(t){g.textContent=`載入失敗：${t.message}`;return}function l(){if(!r)return;r.innerHTML="";const t=[...new Set(a.eggs.map(n=>n.category))].sort();if(t.length>h)return;const e=document.createElement("button");e.className="filter-chip"+(a.activeCategory==="all"?" active":""),e.textContent="全部分類",e.onclick=()=>{a.activeCategory="all",l(),s()},r.appendChild(e),t.forEach(n=>{const c=document.createElement("button");c.className="filter-chip"+(a.activeCategory===n?" active":""),c.textContent=n,c.onclick=()=>{a.activeCategory=n,l(),s()},r.appendChild(c)})}function d(){const t=a.searchTerm.trim().toLowerCase();return a.eggs.filter(e=>!(a.activeCategory!=="all"&&e.category!==a.activeCategory||t&&!e.name.toLowerCase().includes(t)&&!e.path.toLowerCase().includes(t)))}function s(){const t=d();if(i.innerHTML="",!t.length){i.innerHTML='<p class="status">找不到符合條件的 Egg。</p>';return}t.slice(0,400).forEach(e=>{const n=document.createElement("a");n.className="egg-card",n.href=f(e),n.innerHTML=`
+        <h3>${o(e.name)}</h3>
+        <div class="egg-desc">${o(e.path)}</div>
+        <div class="egg-tags">
+          <span class="egg-tag">${o(e.repoLabel)}</span>
+          <span class="egg-tag">${o(e.category)}</span>
+        </div>
+      `,i.appendChild(n)})}if(l(),s(),m){let t;m.addEventListener("input",e=>{clearTimeout(t),t=setTimeout(()=>{a.searchTerm=e.target.value,s()},150)})}return{getEggs:()=>a.eggs}}export{y as m};

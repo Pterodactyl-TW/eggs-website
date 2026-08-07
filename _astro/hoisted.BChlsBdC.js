@@ -1,1 +1,0 @@
-import{m as e}from"./egg-browser.CoHneb2x.js";import"./hoisted.BulHaEt_.js";e({repoId:"applications",gridEl:document.getElementById("egg-grid"),statusEl:document.getElementById("status"),searchEl:document.getElementById("search-input"),categoryFiltersEl:document.getElementById("category-filters")});
