@@ -4,7 +4,7 @@
     "egg": {
       "repoId": "languages",
       "repo": "generic-eggs",
-      "repoLabel": "語言",
+      "repoLabel": "通用語言",
       "path": "java/egg-java.json",
       "category": "java",
       "name": "Generic Java",
@@ -16,7 +16,7 @@
     "egg": {
       "repoId": "languages",
       "repo": "generic-eggs",
-      "repoLabel": "語言",
+      "repoLabel": "通用語言",
       "path": "nodemon/egg-nodemon.json",
       "category": "nodemon",
       "name": "nodemon",
@@ -28,7 +28,7 @@
     "egg": {
       "repoId": "languages",
       "repo": "generic-eggs",
-      "repoLabel": "語言",
+      "repoLabel": "通用語言",
       "path": "bun/egg-bun.json",
       "category": "bun",
       "name": "Bun",
@@ -40,7 +40,7 @@
     "egg": {
       "repoId": "languages",
       "repo": "generic-eggs",
-      "repoLabel": "語言",
+      "repoLabel": "通用語言",
       "path": "c#/egg-generic-c.json",
       "category": "c#",
       "name": "Generic C#",
@@ -52,7 +52,7 @@
     "egg": {
       "repoId": "languages",
       "repo": "generic-eggs",
-      "repoLabel": "語言",
+      "repoLabel": "通用語言",
       "path": "dart/egg-dart-generic.json",
       "category": "dart",
       "name": "dart generic",
@@ -64,7 +64,7 @@
     "egg": {
       "repoId": "languages",
       "repo": "generic-eggs",
-      "repoLabel": "語言",
+      "repoLabel": "通用語言",
       "path": "deno/egg-deno-generic.json",
       "category": "deno",
       "name": "Deno Generic",
@@ -76,7 +76,7 @@
     "egg": {
       "repoId": "languages",
       "repo": "generic-eggs",
-      "repoLabel": "語言",
+      "repoLabel": "通用語言",
       "path": "elixir/egg-elixir.json",
       "category": "elixir",
       "name": "Elixir",
@@ -88,7 +88,7 @@
     "egg": {
       "repoId": "languages",
       "repo": "generic-eggs",
-      "repoLabel": "語言",
+      "repoLabel": "通用語言",
       "path": "golang/egg-golang-generic.json",
       "category": "golang",
       "name": "golang generic",
@@ -100,7 +100,7 @@
     "egg": {
       "repoId": "languages",
       "repo": "generic-eggs",
-      "repoLabel": "語言",
+      "repoLabel": "通用語言",
       "path": "lua/luvit/egg-luvit-generic.json",
       "category": "lua",
       "name": "luvit generic",
@@ -112,7 +112,7 @@
     "egg": {
       "repoId": "languages",
       "repo": "generic-eggs",
-      "repoLabel": "語言",
+      "repoLabel": "通用語言",
       "path": "nodejs/egg-node-js-generic.json",
       "category": "nodejs",
       "name": "node.js generic",
@@ -124,7 +124,7 @@
     "egg": {
       "repoId": "languages",
       "repo": "generic-eggs",
-      "repoLabel": "語言",
+      "repoLabel": "通用語言",
       "path": "python/egg-python-generic.json",
       "category": "python",
       "name": "python generic",
@@ -136,7 +136,7 @@
     "egg": {
       "repoId": "languages",
       "repo": "generic-eggs",
-      "repoLabel": "語言",
+      "repoLabel": "通用語言",
       "path": "rust/egg-rust-generic.json",
       "category": "rust",
       "name": "rust generic",

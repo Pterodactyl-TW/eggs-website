@@ -1,4 +1,4 @@
-import{h as y,a as L,b as r,e as C}from"./eggs-client.BEQ3oQqy.js";const E=document.getElementById("search-input"),i=document.getElementById("search-results"),g=document.getElementById("default-sections"),a=document.getElementById("status"),c=document.getElementById("egg-grid"),s=document.getElementById("recent-status"),l=document.getElementById("recent-grid");let m=[],u=!1;function f(e,n=""){const t=document.createElement("a");return t.className="egg-card",t.href=C(e),t.innerHTML=`
+import{h as y,a as L,b as r,e as C}from"./eggs-client.tii5UZd7.js";const E=document.getElementById("search-input"),i=document.getElementById("search-results"),g=document.getElementById("default-sections"),a=document.getElementById("status"),c=document.getElementById("egg-grid"),s=document.getElementById("recent-status"),l=document.getElementById("recent-grid");let m=[],u=!1;function f(e,n=""){const t=document.createElement("a");return t.className="egg-card",t.href=C(e),t.innerHTML=`
       <div class="egg-card-top">
         <h3>${r(e.name)}</h3>
         <span class="badge">${r(e.repoLabel)}</span>
