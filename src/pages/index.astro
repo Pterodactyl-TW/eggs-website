@@ -28,7 +28,7 @@ const categories = [
 <Layout title="首頁">
   <section class="hero">
     <h1>尋找適合你伺服器的 Egg</h1>
-    <p>Pterodactyl-TW 繁體中文化 Eggs 資源庫，資料即時取自三個 Egg 倉庫，皆已完成繁體中文化。</p>
+    <p>由 Pterodactyl-TW 維護的繁體中文化 Egg 資源庫，涵蓋遊戲、應用程式與程式語言，搜尋後即可一鍵複製匯入網址，加進你的 Panel。</p>
     <div class="search-bar">
       <input id="search-input" type="text" placeholder="搜尋 Egg 名稱...（例如 Minecraft、Discord Bot、Python）" autocomplete="off">
     </div>
@@ -153,20 +153,19 @@ const categories = [
   }
 
   async function loadRecent() {
-    recentStatusEl.textContent = "正在載入最近更新的 Egg...";
+    recentTitleEl.textContent = "最近變更";
+    recentStatusEl.textContent = "正在載入最近變更的 Egg...";
     try {
       // 正式環境：讀取部署時預先產生好的靜態資料，不佔用 api.github.com 的即時額度
       const recent = await loadRecentlyUpdated();
-      recentStatusEl.textContent = "";
       if (!recent.length) throw new Error("empty");
+      recentStatusEl.textContent = "";
       renderRecentList(recent);
     } catch (_) {
-      // 本機開發環境（尚未跑過 scripts/fetch-recent.mjs）：退回隨機抽樣，不呼叫 GitHub API
-      recentTitleEl.textContent = "最近變更";
-      await ensureAllEggsLoaded();
-      recentStatusEl.textContent = allEggs.length ? "" : "目前沒有可顯示的 Egg。";
-      const sample = [...allEggs].sort(() => Math.random() - 0.5).slice(0, 8);
-      renderRecentList(sample.map((egg) => ({ egg, date: null })));
+      // 本機開發環境尚未產生這份資料時，誠實顯示，而不是用隨機 Egg 假裝是「最近變更」
+      recentGridEl.innerHTML = "";
+      recentStatusEl.textContent =
+        "本機開發環境尚未產生「最近變更」資料。執行 GITHUB_TOKEN=你的token npm run fetch:recent 產生 public/recent-eggs.json 後重新整理即可看到真實資料。";
     }
   }
 
