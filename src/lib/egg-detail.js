@@ -78,7 +78,7 @@ export async function renderEggDetail(root) {
   const dockerRows = dockerImages
     .map(([name, image]) => `
       <tr>
-        <td><code class="docker-code">${escapeHtml(name)}</code></td>
+        <td class="docker-name">${escapeHtml(name)}</td>
         <td><code class="docker-code">${escapeHtml(image)}</code></td>
       </tr>
     `)

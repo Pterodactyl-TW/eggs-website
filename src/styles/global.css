@@ -493,6 +493,8 @@ main {
 }
 .docker-table th, .var-table th { color: var(--text-dim); font-weight: 600; }
 
+.docker-name { font-weight: 600; color: var(--text); }
+
 .docker-code {
   display: inline-block;
   padding: 4px 8px;
