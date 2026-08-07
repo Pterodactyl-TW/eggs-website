@@ -26,13 +26,13 @@ const targets = [
 ];
 ---
 <Layout title="請求 Egg" active="request" description="想請求新增一個遊戲、應用程式或語言 Egg 到 Pterodactyl-TW 的 Eggs 收藏中嗎？這裡說明如何提出請求。">
-  <section class="hero">
-    <h1>請求一個 Egg</h1>
-    <p>想在 Pterodactyl-TW 的 Eggs 收藏中看到新的遊戲伺服器、應用程式或語言 Egg 嗎？以下說明如何提出請求。</p>
-  </section>
+  <div class="breadcrumb"><a href="/">首頁</a> / 請求 Egg</div>
 
-  <div class="request-box">
-    <h2>提出請求前</h2>
+  <h1>請求一個 Egg</h1>
+  <p class="page-subtitle">想在 Pterodactyl-TW 的 Eggs 收藏中看到新的遊戲伺服器、應用程式或語言 Egg 嗎？以下說明如何提出請求。</p>
+
+  <div class="callout-box info">
+    <h3>提出請求前</h3>
     <p>請先搜尋現有的 Egg 與已開立的 Issue，避免重複請求。你可以直接在本站的
       <a href="/games/">遊戲</a>、<a href="/applications/">應用程式</a>、<a href="/languages/">語言</a>
       頁面使用搜尋功能確認是否已經有你需要的 Egg。</p>
@@ -69,8 +69,10 @@ const targets = [
       <li>維護者或社群成員會著手製作這個 Egg</li>
       <li>Egg 製作完成後你會收到通知</li>
     </ul>
+  </div>
 
-    <h2>想參與貢獻嗎？</h2>
+  <div class="callout-box success">
+    <h3>想參與貢獻嗎？</h3>
     <p>如果你懂得如何製作 Egg，歡迎直接透過 Pull Request 貢獻！可以到
       <a href="https://github.com/Pterodactyl-TW" target="_blank" rel="noopener">Pterodactyl-TW GitHub</a> 開始參與。
       若你想加入我們的繁體中文化服務團隊，一起維護 Eggs、Panel、Wings 與文件的翻譯，也歡迎透過

@@ -77,12 +77,11 @@ const categories = [
     card.className = "egg-card";
     card.href = eggDetailUrl(egg);
     card.innerHTML = `
-      <h3>${escapeHtml(egg.name)}</h3>
-      <div class="egg-desc">${escapeHtml(egg.path)}</div>
-      <div class="egg-tags">
-        <span class="egg-tag">${escapeHtml(egg.repoLabel)}</span>
-        <span class="egg-tag">${escapeHtml(egg.category)}</span>
+      <div class="egg-card-top">
+        <h3>${escapeHtml(egg.name)}</h3>
+        <span class="badge">${escapeHtml(egg.repoLabel)}</span>
       </div>
+      <div class="egg-desc">${escapeHtml(egg.path)}</div>
       ${extraHtml}
     `;
     return card;
@@ -155,8 +154,8 @@ const categories = [
   }
 
   async function loadRecent() {
-    recentTitleEl.textContent = "最近變更";
-    recentStatusEl.textContent = "正在載入最近變更的 Egg...";
+    recentTitleEl.textContent = "最近更新";
+    recentStatusEl.textContent = "正在載入最近更新的 Egg...";
     try {
       // 正式環境：讀取部署時預先產生好的靜態資料，不佔用 api.github.com 的即時額度
       const recent = await loadRecentlyUpdated();
@@ -165,7 +164,7 @@ const categories = [
       renderRecentList(recent);
     } catch (err) {
       // 開發用的技術性訊息只印在 console，畫面上不顯示任何面向開發者的內容
-      console.info('尚未產生「最近變更」資料：執行 `GITHUB_TOKEN=<token> npm run fetch:recent` 後重新整理即可看到本機資料。');
+      console.info('尚未產生「最近更新」資料：執行 `GITHUB_TOKEN=<token> npm run fetch:recent` 後重新整理即可看到本機資料。');
       recentGridEl.innerHTML = "";
       recentStatusEl.textContent = "";
     }

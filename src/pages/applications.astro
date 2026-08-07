@@ -2,15 +2,20 @@
 import Layout from "../layouts/Layout.astro";
 ---
 <Layout title="應用程式" active="applications" description="瀏覽所有繁體中文化的應用程式 Egg，涵蓋資料庫、機器人、服務等。">
-  <section class="hero">
-    <h1>📦 應用程式</h1>
-    <p>來自 <a href="https://github.com/Pterodactyl-TW/application-eggs" target="_blank" rel="noopener">application-eggs</a> 倉庫的繁體中文化應用程式 Egg。</p>
-    <div class="search-bar">
-      <input id="search-input" type="text" placeholder="搜尋應用程式名稱...（例如 Redis、Discord Bot）" autocomplete="off">
+  <div class="breadcrumb"><a href="/">首頁</a> / 應用程式</div>
+
+  <div class="page-header">
+    <div class="page-icon">📦</div>
+    <div>
+      <h1>應用程式 Eggs</h1>
+      <p class="page-subtitle" id="egg-count-label">載入中...</p>
     </div>
-  </section>
+  </div>
 
   <section class="controls">
+    <div class="inline-search">
+      <input id="search-input" type="text" placeholder="搜尋應用程式名稱...（例如 Redis、Discord Bot）" autocomplete="off">
+    </div>
     <div id="category-filters" class="filter-group" role="group" aria-label="分類篩選"></div>
   </section>
 
@@ -26,5 +31,6 @@ import Layout from "../layouts/Layout.astro";
     statusEl: document.getElementById("status"),
     searchEl: document.getElementById("search-input"),
     categoryFiltersEl: document.getElementById("category-filters"),
+    countLabelEl: document.getElementById("egg-count-label"),
   });
 </script>

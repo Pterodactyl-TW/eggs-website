@@ -2,15 +2,17 @@ import { loadRepoEggs, loadAllEggs, escapeHtml, eggDetailUrl } from "./eggs-clie
 
 const MAX_CATEGORY_CHIPS = 30;
 
-export async function mountEggBrowser({ repoId, gridEl, statusEl, searchEl, categoryFiltersEl }) {
+export async function mountEggBrowser({ repoId, gridEl, statusEl, searchEl, categoryFiltersEl, countLabelEl }) {
   const state = { eggs: [], activeCategory: "all", searchTerm: "" };
 
-  statusEl.textContent = "正在載入 Egg 清單...";
+  if (countLabelEl) countLabelEl.textContent = "載入中...";
   try {
     state.eggs = repoId ? await loadRepoEggs(repoId) : (await loadAllEggs()).eggs;
-    statusEl.textContent = `已載入 ${state.eggs.length} 個 Egg。`;
+    if (countLabelEl) countLabelEl.textContent = `${state.eggs.length} 個 Egg`;
+    statusEl.textContent = "";
   } catch (err) {
     console.error("載入 Egg 清單失敗：", err);
+    if (countLabelEl) countLabelEl.textContent = "";
     statusEl.textContent = "載入 Egg 清單時發生問題，請稍後再試。";
     return;
   }
@@ -59,10 +61,7 @@ export async function mountEggBrowser({ repoId, gridEl, statusEl, searchEl, cate
       card.innerHTML = `
         <h3>${escapeHtml(egg.name)}</h3>
         <div class="egg-desc">${escapeHtml(egg.path)}</div>
-        <div class="egg-tags">
-          <span class="egg-tag">${escapeHtml(egg.repoLabel)}</span>
-          <span class="egg-tag">${escapeHtml(egg.category)}</span>
-        </div>
+        <span class="egg-card-link">查看詳細 →</span>
       `;
       gridEl.appendChild(card);
     });

@@ -148,6 +148,40 @@ main {
 .category-card p { margin: 0 0 14px; color: var(--text-dim); font-size: 0.9rem; }
 .category-card .cta { color: var(--accent); font-size: 0.9rem; font-weight: 600; }
 
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 16px 0 28px;
+}
+.page-icon {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: rgba(88, 101, 242, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+}
+.page-header h1 { margin: 0 0 4px; font-size: 1.7rem; }
+.page-subtitle { margin: 0; color: var(--text-dim); font-size: 0.9rem; }
+
+.inline-search { width: 100%; max-width: 400px; }
+.inline-search input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.9rem;
+}
+.inline-search input:focus { outline: 2px solid var(--accent); }
+
+.egg-card-link { display: inline-block; margin-top: 10px; color: var(--accent); font-size: 0.85rem; font-weight: 600; }
+
 .section-title {
   font-size: 1.2rem;
   margin: 40px 0 16px;
@@ -203,6 +237,8 @@ main {
 }
 .egg-card:hover { background: var(--card-hover); transform: translateY(-2px); text-decoration: none; }
 .egg-card h3 { margin: 0 0 6px; font-size: 1.05rem; color: var(--text); }
+.egg-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.egg-card-top h3 { margin: 0; }
 .egg-card .egg-desc {
   color: var(--text-dim);
   font-size: 0.85rem;
@@ -210,18 +246,9 @@ main {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  margin-top: 6px;
 }
 .egg-card .egg-date { color: var(--text-dim); font-size: 0.75rem; margin-top: 6px; }
-
-.egg-tags { margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap; }
-.egg-tag {
-  font-size: 0.7rem;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--bg-alt);
-  color: var(--text-dim);
-  border: 1px solid var(--border);
-}
 
 .modal-overlay {
   position: fixed;
@@ -296,10 +323,44 @@ main {
   margin-top: 20px;
 }
 .request-box h2 { margin-top: 0; }
-.request-box ul { padding-left: 20px; }
+.request-box ul, .request-box ol { padding-left: 20px; }
 .request-box li { margin-bottom: 8px; }
 
-.site-footer { text-align: center; color: var(--text-dim); font-size: 0.85rem; padding: 24px 20px 40px; }
+.callout-box {
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 20px 0;
+  border: 1px solid;
+}
+.callout-box h3 { margin: 0 0 6px; font-size: 0.95rem; }
+.callout-box p { margin: 0; font-size: 0.9rem; }
+.callout-box.info {
+  background: rgba(88, 101, 242, 0.1);
+  border-color: rgba(88, 101, 242, 0.3);
+}
+.callout-box.info h3 { color: var(--accent); }
+.callout-box.success {
+  background: rgba(59, 178, 115, 0.1);
+  border-color: rgba(59, 178, 115, 0.35);
+}
+.callout-box.success h3 { color: #3bb273; }
+
+.site-footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  padding: 24px 20px 40px;
+  border-top: 1px solid var(--border);
+}
+.site-footer a { color: var(--text-dim); }
+.site-footer a:hover { color: var(--text); }
+.footer-links { display: flex; gap: 16px; }
 
 /* Egg 詳細頁 */
 .breadcrumb { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 14px; }
