@@ -6,7 +6,7 @@ export const ORG = "Pterodactyl-TW";
 export const REPOS = {
   games: { key: "game-eggs", label: "遊戲" },
   applications: { key: "application-eggs", label: "應用程式" },
-  languages: { key: "generic-eggs", label: "語言" },
+  languages: { key: "generic-eggs", label: "通用語言" },
 };
 
 // 部署時由 CI 帶入 commit SHA 作為快取破壞用的版本號，

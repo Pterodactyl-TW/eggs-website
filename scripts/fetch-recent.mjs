@@ -7,7 +7,7 @@ const ORG = "Pterodactyl-TW";
 const REPOS = {
   games: { key: "game-eggs", label: "遊戲" },
   applications: { key: "application-eggs", label: "應用程式" },
-  languages: { key: "generic-eggs", label: "語言" },
+  languages: { key: "generic-eggs", label: "通用語言" },
 };
 const COMMITS_TO_SCAN = 15;
 const TAKE = 12;
