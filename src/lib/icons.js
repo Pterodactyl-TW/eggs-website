@@ -4,6 +4,10 @@ function svg(inner, extra = "") {
   return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ${extra}>${inner}</svg>`;
 }
 
+function svgFill(inner, viewBox = "0 0 256 256") {
+  return `<svg viewBox="${viewBox}" fill="currentColor">${inner}</svg>`;
+}
+
 export const ICONS = {
   search: svg(`<circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>`),
 
@@ -15,11 +19,7 @@ export const ICONS = {
     <rect x="2" y="6" width="20" height="12" rx="6"></rect>
   `),
 
-  package: svg(`
-    <path d="M21 8l-9-5-9 5 9 5 9-5z"></path>
-    <path d="M3 8v8l9 5 9-5V8"></path>
-    <path d="M12 13v8"></path>
-  `),
+  package: svgFill(`<path d="M216,36.00586H40a20.02229,20.02229,0,0,0-20,20v144a20.02229,20.02229,0,0,0,20,20H216a20.02229,20.02229,0,0,0,20-20v-144A20.02229,20.02229,0,0,0,216,36.00586Zm-4,160H44v-136H212Zm-152-104a16,16,0,1,1,16,16A16.00016,16.00016,0,0,1,60,92.00586Zm48,0a16,16,0,1,1,16,16A16.00016,16.00016,0,0,1,108,92.00586Z"/>`),
 
   code: svg(`<polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline>`),
 
