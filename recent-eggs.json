@@ -1,0 +1,134 @@
+[
+  {
+    "date": "2026-08-06T13:22:41Z",
+    "egg": {
+      "repoId": "languages",
+      "repo": "generic-eggs",
+      "repoLabel": "語言",
+      "path": "java/egg-java.json",
+      "category": "java",
+      "name": "java"
+    }
+  },
+  {
+    "date": "2026-08-06T13:22:41Z",
+    "egg": {
+      "repoId": "languages",
+      "repo": "generic-eggs",
+      "repoLabel": "語言",
+      "path": "nodemon/egg-nodemon.json",
+      "category": "nodemon",
+      "name": "nodemon"
+    }
+  },
+  {
+    "date": "2026-08-06T13:17:15Z",
+    "egg": {
+      "repoId": "languages",
+      "repo": "generic-eggs",
+      "repoLabel": "語言",
+      "path": "bun/egg-bun.json",
+      "category": "bun",
+      "name": "bun"
+    }
+  },
+  {
+    "date": "2026-08-06T13:17:15Z",
+    "egg": {
+      "repoId": "languages",
+      "repo": "generic-eggs",
+      "repoLabel": "語言",
+      "path": "c#/egg-generic-c.json",
+      "category": "c#",
+      "name": "generic c"
+    }
+  },
+  {
+    "date": "2026-08-06T13:17:15Z",
+    "egg": {
+      "repoId": "languages",
+      "repo": "generic-eggs",
+      "repoLabel": "語言",
+      "path": "dart/egg-dart-generic.json",
+      "category": "dart",
+      "name": "dart generic"
+    }
+  },
+  {
+    "date": "2026-08-06T13:17:15Z",
+    "egg": {
+      "repoId": "languages",
+      "repo": "generic-eggs",
+      "repoLabel": "語言",
+      "path": "deno/egg-deno-generic.json",
+      "category": "deno",
+      "name": "deno generic"
+    }
+  },
+  {
+    "date": "2026-08-06T13:17:15Z",
+    "egg": {
+      "repoId": "languages",
+      "repo": "generic-eggs",
+      "repoLabel": "語言",
+      "path": "elixir/egg-elixir.json",
+      "category": "elixir",
+      "name": "elixir"
+    }
+  },
+  {
+    "date": "2026-08-06T13:17:15Z",
+    "egg": {
+      "repoId": "languages",
+      "repo": "generic-eggs",
+      "repoLabel": "語言",
+      "path": "golang/egg-golang-generic.json",
+      "category": "golang",
+      "name": "golang generic"
+    }
+  },
+  {
+    "date": "2026-08-06T13:17:15Z",
+    "egg": {
+      "repoId": "languages",
+      "repo": "generic-eggs",
+      "repoLabel": "語言",
+      "path": "lua/luvit/egg-luvit-generic.json",
+      "category": "lua",
+      "name": "luvit generic"
+    }
+  },
+  {
+    "date": "2026-08-06T13:17:15Z",
+    "egg": {
+      "repoId": "languages",
+      "repo": "generic-eggs",
+      "repoLabel": "語言",
+      "path": "nodejs/egg-node-js-generic.json",
+      "category": "nodejs",
+      "name": "node js generic"
+    }
+  },
+  {
+    "date": "2026-08-06T13:17:15Z",
+    "egg": {
+      "repoId": "languages",
+      "repo": "generic-eggs",
+      "repoLabel": "語言",
+      "path": "python/egg-python-generic.json",
+      "category": "python",
+      "name": "python generic"
+    }
+  },
+  {
+    "date": "2026-08-06T13:17:15Z",
+    "egg": {
+      "repoId": "languages",
+      "repo": "generic-eggs",
+      "repoLabel": "語言",
+      "path": "rust/egg-rust-generic.json",
+      "category": "rust",
+      "name": "rust generic"
+    }
+  }
+]

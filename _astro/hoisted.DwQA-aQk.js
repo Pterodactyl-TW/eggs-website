@@ -1,9 +1,0 @@
-import{d as p,a as y,b as a,e as C}from"./eggs-client.D32ovC1W.js";const h=document.getElementById("search-input"),l=document.getElementById("search-results"),i=document.getElementById("default-sections"),r=document.getElementById("status"),c=document.getElementById("egg-grid"),s=document.getElementById("recent-status"),L=document.getElementById("recent-grid");let m=[],g=!1;function E(e,n=""){const t=document.createElement("a");return t.className="egg-card",t.href=C(e),t.innerHTML=`
-      <h3>${a(e.name)}</h3>
-      <div class="egg-desc">${a(e.path)}</div>
-      <div class="egg-tags">
-        <span class="egg-tag">${a(e.repoLabel)}</span>
-        <span class="egg-tag">${a(e.category)}</span>
-      </div>
-      ${n}
-    `,t}async function $(){if(!g){r.textContent="正在從 GitHub 即時載入 Egg 清單...";try{const{eggs:e,errors:n}=await y();m=e,g=!0,r.textContent=n.length?`已載入 ${e.length} 個 Egg，但部分來源載入失敗：${n.join("；")}`:`已即時載入 ${e.length} 個 Egg。`}catch(e){r.textContent=`載入失敗：${e.message}`}}}function v(e){c.innerHTML="";const n=m.filter(t=>t.name.toLowerCase().includes(e)||t.path.toLowerCase().includes(e));if(!n.length){c.innerHTML=`<p class="status">找不到符合「${a(e)}」的 Egg。</p>`;return}n.slice(0,60).forEach(t=>c.appendChild(E(t)))}async function f(e){if(!e){l.hidden=!0,i.hidden=!1;return}i.hidden=!0,l.hidden=!1,await $(),v(e)}let u;h.addEventListener("input",e=>{clearTimeout(u),u=setTimeout(()=>f(e.target.value.trim().toLowerCase()),150)});const o=new URLSearchParams(location.search).get("q");o&&(h.value=o,f(o.trim().toLowerCase()));async function w(){s.textContent="正在載入最近更新的 Egg...";try{const e=await p();if(s.textContent="",!e.length){s.textContent="目前沒有可顯示的最近更新資料。";return}e.forEach(({egg:n,date:t})=>{const d=t?new Date(t).toLocaleDateString("zh-TW"):"";L.appendChild(E(n,d?`<div class="egg-date">最後更新：${d}</div>`:""))})}catch(e){s.textContent=`載入失敗：${e.message}`}}w();
