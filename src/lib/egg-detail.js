@@ -52,10 +52,12 @@ export async function renderEggDetail(root) {
   }
 
   let data;
+  let rawText;
   try {
     const res = await fetch(rawUrl(egg));
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    data = await res.json();
+    rawText = await res.text();
+    data = JSON.parse(rawText);
   } catch (err) {
     console.error("載入 Egg 內容失敗：", err);
     root.innerHTML = `<p class="status">載入這個 Egg 的內容時發生問題，請稍後再試。</p>`;
@@ -105,7 +107,7 @@ export async function renderEggDetail(root) {
           <span class="badge">${escapeHtml(egg.category)}</span>
         </div>
         <div class="actions-row">
-          <a class="btn primary" href="${escapeHtml(importUrl)}" download target="_blank" rel="noopener">⬇ 下載 Egg</a>
+          <button class="btn primary" id="download-egg-btn">⬇ 下載 Egg</button>
           <button id="copy-url-btn">⧉ 複製網址</button>
           <a class="btn" href="${escapeHtml(issueUrl)}" target="_blank" rel="noopener">⚠ 回報問題</a>
         </div>
@@ -172,6 +174,20 @@ export async function renderEggDetail(root) {
       btn.textContent = "已複製！";
       setTimeout(() => { btn.textContent = "⧉ 複製網址"; }, 1500);
     });
+  };
+
+  document.getElementById("download-egg-btn").onclick = () => {
+    // 跨網域的連結加 download 屬性瀏覽器不會強制下載，只會直接開啟，
+    // 所以改成用 Blob 觸發真正的檔案下載。
+    const blob = new Blob([rawText], { type: "application/json" });
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = blobUrl;
+    a.download = egg.path.split("/").pop();
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(blobUrl);
   };
 
   const contributorsBox = document.getElementById("contributors-box");
