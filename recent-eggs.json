@@ -7,7 +7,8 @@
       "repoLabel": "語言",
       "path": "java/egg-java.json",
       "category": "java",
-      "name": "java"
+      "name": "Generic Java",
+      "description": "建立一個執行 java 的容器。"
     }
   },
   {
@@ -18,7 +19,8 @@
       "repoLabel": "語言",
       "path": "nodemon/egg-nodemon.json",
       "category": "nodemon",
-      "name": "nodemon"
+      "name": "nodemon",
+      "description": "一款使用 Nodemon 的 JavaScript egg，能在偵測到目錄中檔案變更時自動重新啟動 node 應用程式\r\n\r\n此 egg 會為機器人 clone 一個 git 儲存庫。若未指定分支，預設會使用 master 分支。"
     }
   },
   {
@@ -29,7 +31,8 @@
       "repoLabel": "語言",
       "path": "bun/egg-bun.json",
       "category": "bun",
-      "name": "bun"
+      "name": "Bun",
+      "description": "Bun 是一款速度極快的 JavaScript 執行環境，同時具備轉譯器、打包工具與 npm 套件管理員等全方位功能。"
     }
   },
   {
@@ -40,7 +43,8 @@
       "repoLabel": "語言",
       "path": "c#/egg-generic-c.json",
       "category": "c#",
-      "name": "generic c"
+      "name": "Generic C#",
+      "description": "一款用於執行你 C# 專案的通用 C#（dotnet）egg。"
     }
   },
   {
@@ -51,7 +55,8 @@
       "repoLabel": "語言",
       "path": "dart/egg-dart-generic.json",
       "category": "dart",
-      "name": "dart generic"
+      "name": "dart generic",
+      "description": "一款通用的 Dart CLI egg。\r\n\r\n此 egg 會 clone 一個 Dart CLI 應用程式。若未指定分支，預設會使用 master 分支。\r\n\r\n執行時會安裝 pubspec.yaml 中的套件。若你設定了 user_upload，則假設你已清楚自己在做什麼。"
     }
   },
   {
@@ -62,7 +67,8 @@
       "repoLabel": "語言",
       "path": "deno/egg-deno-generic.json",
       "category": "deno",
-      "name": "deno generic"
+      "name": "Deno Generic",
+      "description": "一款用來執行 deno 程式碼的通用 egg。"
     }
   },
   {
@@ -73,7 +79,8 @@
       "repoLabel": "語言",
       "path": "elixir/egg-elixir.json",
       "category": "elixir",
-      "name": "elixir"
+      "name": "Elixir",
+      "description": "Elixir 是一款函式化、並行處理的高階通用程式語言，執行於 BEAM 虛擬機器上，該虛擬機器同樣也用來實作 Erlang 程式語言。"
     }
   },
   {
@@ -84,7 +91,8 @@
       "repoLabel": "語言",
       "path": "golang/egg-golang-generic.json",
       "category": "golang",
-      "name": "golang generic"
+      "name": "golang generic",
+      "description": "一款通用的 golang egg，會編譯應用程式並儲存為執行檔\r\n\r\n設計上須依需求自行客製化後再使用。"
     }
   },
   {
@@ -95,7 +103,8 @@
       "repoLabel": "語言",
       "path": "lua/luvit/egg-luvit-generic.json",
       "category": "lua",
-      "name": "luvit generic"
+      "name": "luvit generic",
+      "description": "一款通用的 luvit egg，會 clone 一個 git 儲存庫。若未指定分支，預設會使用 master 分支。\r\n\r\n支援 discordia lua 框架。"
     }
   },
   {
@@ -106,7 +115,8 @@
       "repoLabel": "語言",
       "path": "nodejs/egg-node-js-generic.json",
       "category": "nodejs",
-      "name": "node js generic"
+      "name": "node.js generic",
+      "description": "一款通用的 node.js egg\r\n\r\n此 egg 會 clone 一個 git 儲存庫。若未指定分支，預設會使用 master 分支。\r\n\r\n安裝時會安裝 node_modules。若你設定了 user_upload，則假設你已清楚自己在做什麼。"
     }
   },
   {
@@ -117,7 +127,8 @@
       "repoLabel": "語言",
       "path": "python/egg-python-generic.json",
       "category": "python",
-      "name": "python generic"
+      "name": "python generic",
+      "description": "Pterodactyl 適用的通用 Python egg\r\n\r\n測試環境：https://github.com/Ispira/pixel-bot"
     }
   },
   {
@@ -128,7 +139,8 @@
       "repoLabel": "語言",
       "path": "rust/egg-rust-generic.json",
       "category": "rust",
-      "name": "rust generic"
+      "name": "rust generic",
+      "description": "建立一個以 cargo 執行 rust 的容器。"
     }
   }
 ]
