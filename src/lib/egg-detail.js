@@ -1,6 +1,27 @@
 import { marked } from "marked";
+import hljs from "highlight.js/lib/core";
+import bash from "highlight.js/lib/languages/bash";
 import { REPOS, ORG, findEgg, loadContributors, rawUrl, githubUrl, escapeHtml } from "./eggs-client.js";
 import { ICONS } from "./icons.js";
+
+hljs.registerLanguage("bash", bash);
+
+function highlightScript(text) {
+  try {
+    return hljs.highlight(text, { language: "bash" }).value;
+  } catch (_) {
+    return escapeHtml(text);
+  }
+}
+
+// 讓 README 內的程式碼區塊也套用同一套語法上色與樣式
+marked.use({
+  renderer: {
+    code({ text }) {
+      return `<pre class="script-block"><code class="hljs language-bash">${highlightScript(text)}</code></pre>`;
+    },
+  },
+});
 
 function commitsUrl(egg) {
   return `https://github.com/${ORG}/${egg.repo}/commits/${egg.branch}/${egg.path}`;
@@ -165,7 +186,7 @@ export async function renderEggDetail(root) {
         <details>
           <summary>啟動指令</summary>
           <div class="accordion-body">
-            <pre class="script-block">${escapeHtml(data.startup)}</pre>
+            <pre class="script-block"><code class="hljs language-bash">${highlightScript(data.startup)}</code></pre>
           </div>
         </details>
       ` : ""}
@@ -185,7 +206,7 @@ export async function renderEggDetail(root) {
               <div>容器映像檔：<code>${escapeHtml(install.container || "-")}</code></div>
               <div>進入點：<code>${escapeHtml(install.entrypoint || "-")}</code></div>
             </div>
-            <pre class="script-block">${escapeHtml(install.script || "")}</pre>
+            <pre class="script-block"><code class="hljs language-bash">${highlightScript(install.script || "")}</code></pre>
           </div>
         </details>
       ` : ""}

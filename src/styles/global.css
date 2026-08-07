@@ -581,6 +581,16 @@ main {
   .script-block { background: #1a1c24; color: #e6e8ee; }
 }
 
+/* highlight.js（bash）語法上色，配色配合站內深色背景 */
+.hljs-comment, .hljs-quote { color: #6b7280; font-style: italic; }
+.hljs-string, .hljs-meta-string { color: #a6e3a1; }
+.hljs-variable, .hljs-template-variable { color: #f9e2af; }
+.hljs-keyword, .hljs-selector-tag, .hljs-built_in { color: #89b4fa; }
+.hljs-literal, .hljs-number { color: #fab387; }
+.hljs-title, .hljs-section, .hljs-function { color: #cba6f7; }
+.hljs-operator, .hljs-punctuation { color: #d6dbe6; }
+.hljs-attr, .hljs-symbol { color: #f38ba8; }
+
 .markdown-body h1, .markdown-body h2, .markdown-body h3 { margin: 1.2em 0 0.5em; }
 .markdown-body h1:first-child, .markdown-body h2:first-child, .markdown-body h3:first-child { margin-top: 0; }
 .markdown-body p { margin: 0 0 1em; }
