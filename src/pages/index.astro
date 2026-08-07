@@ -4,28 +4,28 @@ import Layout from "../layouts/Layout.astro";
 const categories = [
   {
     icon: "🎮",
-    title: "Games",
+    title: "遊戲",
     desc: "遊戲伺服器 Egg，涵蓋 Minecraft、ARK、CS 等。",
     href: "/games/",
-    cta: "Browse games",
+    cta: "瀏覽遊戲",
   },
   {
     icon: "📦",
-    title: "Applications",
+    title: "應用程式",
     desc: "應用程式 Egg，涵蓋資料庫、機器人與各種服務。",
     href: "/applications/",
-    cta: "Browse applications",
+    cta: "瀏覽應用程式",
   },
   {
     icon: "💻",
-    title: "Languages",
+    title: "語言",
     desc: "通用語言 Egg，涵蓋 Python、Node.js、Go 等。",
     href: "/languages/",
-    cta: "Browse languages",
+    cta: "瀏覽語言",
   },
 ];
 ---
-<Layout title="Home">
+<Layout title="首頁">
   <section class="hero">
     <h1>尋找適合你伺服器的 Egg</h1>
     <p>Pterodactyl-TW 繁體中文化 Eggs 資源庫，資料即時取自三個 Egg 倉庫，皆已完成繁體中文化。</p>
@@ -35,7 +35,7 @@ const categories = [
   </section>
 
   <div id="search-results" hidden>
-    <h2 class="section-title">Search Results</h2>
+    <h2 class="section-title">搜尋結果</h2>
     <section id="status" class="status"></section>
     <section id="egg-grid" class="egg-grid"></section>
   </div>
@@ -52,7 +52,7 @@ const categories = [
       ))}
     </div>
 
-    <h2 class="section-title">Recently Updated</h2>
+    <h2 class="section-title">最近更新</h2>
     <section id="recent-status" class="status"></section>
     <section id="recent-grid" class="egg-grid"></section>
   </div>
