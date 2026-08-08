@@ -1,0 +1,1 @@
+import{m as e}from"./egg-browser.DMw-LGKg.js";import"./eggs-client.CjVpEvLk.js";e({repoId:"applications",gridEl:document.getElementById("egg-grid"),statusEl:document.getElementById("status"),searchEl:document.getElementById("search-input"),categoryFiltersEl:document.getElementById("category-filters"),countLabelEl:document.getElementById("egg-count-label")});
