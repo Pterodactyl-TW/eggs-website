@@ -444,19 +444,26 @@ main {
 }
 .contributor-avatars { display: flex; align-items: center; }
 .contributor-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 2px solid var(--card);
-  margin-left: -12px;
-  object-fit: cover;
-  background: var(--bg-alt);
-}
-.contributor-avatar:first-child { margin-left: 0; }
-.contributor-fallback {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid var(--card);
+  margin-left: -12px;
+  overflow: hidden;
+  background: var(--bg-alt);
+}
+.contributor-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.contributor-avatar:first-child { margin-left: 0; }
+.contributor-fallback {
   font-size: 0.95rem;
   color: var(--text-dim);
 }

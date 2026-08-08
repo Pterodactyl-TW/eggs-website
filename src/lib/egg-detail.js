@@ -51,9 +51,7 @@ function renderContributors(contributors, commitHistoryUrl) {
     .map((c) => {
       const label = c.login || c.name || "";
       if (c.login) {
-        return `<a href="${escapeHtml(commitHistoryUrl)}" target="_blank" rel="noopener" title="${escapeHtml(label)}">
-          <img class="contributor-avatar" src="https://github.com/${escapeHtml(c.login)}.png?size=64" alt="${escapeHtml(label)}">
-        </a>`;
+        return `<a class="contributor-avatar" href="${escapeHtml(commitHistoryUrl)}" target="_blank" rel="noopener" title="${escapeHtml(label)}"><img src="https://github.com/${escapeHtml(c.login)}.png?size=64" alt="${escapeHtml(label)}"></a>`;
       }
       const initial = escapeHtml((c.name || "?").charAt(0).toUpperCase());
       return `<a class="contributor-avatar contributor-fallback" href="${escapeHtml(commitHistoryUrl)}" target="_blank" rel="noopener" title="${escapeHtml(label)}">${initial}</a>`;
